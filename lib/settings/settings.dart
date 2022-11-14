@@ -192,6 +192,8 @@ class NoteFileNameFormat {
       NoteFileNameFormat("DateOnly", 'settings.NoteFileNameFormat.dateOnly');
   static const KebabCase =
       NoteFileNameFormat("KebabCase", 'settings.NoteFileNameFormat.kebabCase');
+  static const Template =
+    NoteFileNameFormat("Template", 'settings.NoteFileNameFormat.template');
 
   static const Default = FromTitle;
 
@@ -205,6 +207,7 @@ class NoteFileNameFormat {
     Zettelkasten,
     DateOnly,
     KebabCase,
+    Template
   ];
 
   static NoteFileNameFormat fromInternalString(String? str) {
