@@ -11,7 +11,6 @@ publish_to: none
 
 dependencies:
   dots_indicator: ^2.0.0
-  easy_localization: ^3.0.0
   function_types: ^0.1.0
   provider: ^6.0.1
   time: ^2.0.0
@@ -27,9 +26,5 @@ dev_dependencies:
     sdk: flutter
   # flutter_lints: ^2.0.0
   test: ^1.16.5
-  import_sorter: ^4.6.0
 
 flutter:
-
-import_sorter:
-  comments: false

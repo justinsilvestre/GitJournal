@@ -6,19 +6,16 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
-import 'package:easy_localization/easy_localization.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:function_types/function_types.dart';
-import 'package:image_picker/image_picker.dart';
-
 import 'package:gitjournal/core/folder/notes_folder_fs.dart';
 import 'package:gitjournal/editors/common.dart';
 import 'package:gitjournal/error_reporting.dart';
 import 'package:gitjournal/features.dart';
-import 'package:gitjournal/generated/locale_keys.g.dart';
+import 'package:gitjournal/l10n.dart';
 import 'package:gitjournal/utils/utils.dart';
 import 'package:gitjournal/widgets/pro_overlay.dart';
+import 'package:image_picker/image_picker.dart';
 
 class EditorBottomBar extends StatelessWidget {
   final Editor editor;
@@ -149,7 +146,7 @@ class AddBottomSheet extends StatelessWidget {
       children: <Widget>[
         ListTile(
           leading: const Icon(Icons.camera),
-          title: Text(tr(LocaleKeys.editors_common_takePhoto)),
+          title: Text(context.loc.editorsCommonTakePhoto),
           onTap: () async {
             try {
               var image = await ImagePicker().pickImage(
@@ -167,7 +164,7 @@ class AddBottomSheet extends StatelessWidget {
         ),
         ListTile(
           leading: const Icon(Icons.image),
-          title: Text(tr(LocaleKeys.editors_common_addImage)),
+          title: Text(context.loc.editorsCommonAddImage),
           onTap: () async {
             try {
               var image = await ImagePicker().pickImage(
@@ -220,7 +217,7 @@ class BottomMenuSheet extends StatelessWidget {
       children: <Widget>[
         ListTile(
           leading: const Icon(Icons.undo),
-          title: Text(tr(LocaleKeys.editors_common_discard)),
+          title: Text(context.loc.editorsCommonDiscard),
           onTap: () {
             var note = editorState.getNote();
             Navigator.of(context).pop();
@@ -231,7 +228,7 @@ class BottomMenuSheet extends StatelessWidget {
         ),
         ListTile(
           leading: const Icon(Icons.share),
-          title: Text(tr(LocaleKeys.editors_common_share)),
+          title: Text(context.loc.editorsCommonShare),
           onTap: () {
             var note = editorState.getNote();
             Navigator.of(context).pop();
@@ -244,7 +241,7 @@ class BottomMenuSheet extends StatelessWidget {
             feature: Feature.tags,
             child: ListTile(
               leading: const FaIcon(FontAwesomeIcons.tag),
-              title: Text(tr(LocaleKeys.editors_common_tags)),
+              title: Text(context.loc.editorsCommonTags),
               onTap: () {
                 var note = editorState.getNote();
                 Navigator.of(context).pop();
@@ -256,7 +253,7 @@ class BottomMenuSheet extends StatelessWidget {
         ListTile(
           key: const ValueKey('EditFileNameButton'),
           leading: const Icon(Icons.edit),
-          title: Text(tr(LocaleKeys.editors_common_editFileName)),
+          title: Text(context.loc.editorsCommonEditFileName),
           onTap: () {
             var note = editorState.getNote();
             Navigator.of(context).pop();
@@ -268,9 +265,9 @@ class BottomMenuSheet extends StatelessWidget {
           feature: Feature.zenMode,
           child: ListTile(
             leading: const FaIcon(FontAwesomeIcons.peace),
-            title: Text(tr(zenModeEnabled
-                ? LocaleKeys.editors_common_zen_disable
-                : LocaleKeys.editors_common_zen_enable)),
+            title: Text(zenModeEnabled
+                ? context.loc.editorsCommonZenDisable
+                : context.loc.editorsCommonZenEnable),
             onTap: () {
               zenModeChanged();
               Navigator.of(context).pop();
@@ -280,7 +277,7 @@ class BottomMenuSheet extends StatelessWidget {
         if (findAllowed)
           ListTile(
             leading: const Icon(Icons.search),
-            title: Text(tr(LocaleKeys.editors_common_find)),
+            title: Text(context.loc.editorsCommonFind),
             onTap: () {
               Navigator.of(context).pop();
               onFindSelected();

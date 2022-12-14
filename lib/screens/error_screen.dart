@@ -5,14 +5,12 @@
  */
 
 import 'package:flutter/material.dart';
-
-import 'package:easy_localization/easy_localization.dart';
-import 'package:provider/provider.dart';
-
-import 'package:gitjournal/generated/locale_keys.g.dart';
+import 'package:gitjournal/l10n.dart';
 import 'package:gitjournal/repository_manager.dart';
 import 'package:gitjournal/settings/settings_git_remote.dart';
 import 'package:gitjournal/widgets/app_drawer.dart';
+import 'package:provider/provider.dart';
+
 import 'home_screen.dart';
 
 class ErrorScreen extends StatelessWidget {
@@ -40,7 +38,7 @@ class ErrorScreen extends StatelessWidget {
       Padding(
         padding: const EdgeInsets.all(8.0),
         child: Text(
-          LocaleKeys.screens_error_message.tr(),
+          context.loc.screensErrorMessage,
           textAlign: TextAlign.center,
           style: Theme.of(context).textTheme.subtitle1,
         ),
@@ -57,7 +55,7 @@ class ErrorScreen extends StatelessWidget {
       SizedBox(
         width: double.infinity,
         child: ElevatedButton(
-          child: Text(LocaleKeys.drawer_addRepo.tr()),
+          child: Text(context.loc.drawerAddRepo),
           onPressed: () async {
             var r = await repoManager.addRepoAndSwitch();
             Navigator.pop(context);
@@ -73,13 +71,13 @@ class ErrorScreen extends StatelessWidget {
         ),
       ),
       RedButton(
-        text: tr(LocaleKeys.settings_deleteRepo),
+        text: context.loc.settingsDeleteRepo,
         onPressed: () async {
           var ok = await showDialog(
             context: context,
             builder: (_) => IrreversibleActionConfirmationDialog(
-              title: LocaleKeys.settings_deleteRepo.tr(),
-              subtitle: LocaleKeys.settings_gitRemote_changeHost_subtitle.tr(),
+              title: context.loc.settingsDeleteRepo,
+              subtitle: context.loc.settingsGitRemoteChangeHostSubtitle,
             ),
           );
           if (ok == null) {
@@ -97,7 +95,7 @@ class ErrorScreen extends StatelessWidget {
     return Scaffold(
       drawer: AppDrawer(),
       appBar: AppBar(
-        title: Text(LocaleKeys.screens_error_title.tr()),
+        title: Text(context.loc.screensErrorTitle),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),

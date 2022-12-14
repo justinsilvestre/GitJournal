@@ -7,13 +7,10 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-
-import 'package:easy_localization/easy_localization.dart';
-
 import 'package:gitjournal/analytics/analytics.dart';
-import 'package:gitjournal/generated/locale_keys.g.dart';
 import 'package:gitjournal/iap/purchase_manager.dart';
 import 'package:gitjournal/iap/purchase_widget.dart';
+import 'package:gitjournal/l10n.dart';
 import 'package:gitjournal/logger/logger.dart';
 import 'package:gitjournal/screens/feature_timeline_screen.dart';
 import 'package:gitjournal/widgets/scroll_view_without_animation.dart';
@@ -74,7 +71,7 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
     return WillPopScope(
       child: Scaffold(
         appBar: AppBar(
-          title: Text(tr(LocaleKeys.purchase_screen_title)),
+          title: Text(context.loc.purchaseScreenTitle),
         ),
         body: buildBody(context),
       ),
@@ -88,7 +85,7 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
         Padding(
           padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 0.0),
           child: Text(
-            tr(LocaleKeys.purchase_screen_desc),
+            context.loc.purchaseScreenDesc,
             style: Theme.of(context).textTheme.bodyText2,
           ),
         ),
@@ -110,7 +107,7 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
               const RestorePurchaseButton(),
               OutlinedButton(
                 child: Text(
-                  tr(LocaleKeys.feature_timeline_title),
+                  context.loc.featureTimelineTitle,
                   style: Theme.of(context).textTheme.bodyText2,
                 ),
                 onPressed: () {
@@ -163,7 +160,7 @@ class MonthlyRentalWidget extends StatelessWidget {
       child: Column(
         children: [
           Text(
-            tr(LocaleKeys.purchase_screen_monthly_title),
+            context.loc.purchaseScreenMonthlyTitle,
             style: textTheme.headline5,
             textAlign: TextAlign.center,
           ),
@@ -175,10 +172,9 @@ class MonthlyRentalWidget extends StatelessWidget {
             isSubscription: true,
           ),
           const SizedBox(height: 32.0),
-          Text(tr(
-            LocaleKeys.purchase_screen_monthly_desc,
-            namedArgs: {'minYearlyPurchase': minYearlyPurchase},
-          )),
+          Text(
+            context.loc.purchaseScreenMonthlyDesc(minYearlyPurchase),
+          ),
         ],
         mainAxisAlignment: MainAxisAlignment.start,
       ),
@@ -199,7 +195,7 @@ class YearlyPurchaseWidget extends StatelessWidget {
       child: Column(
         children: [
           Text(
-            tr(LocaleKeys.purchase_screen_oneTime_title),
+            context.loc.purchaseScreenOneTimeTitle,
             style: textTheme.headline5,
             textAlign: TextAlign.center,
           ),
@@ -210,7 +206,7 @@ class YearlyPurchaseWidget extends StatelessWidget {
             isSubscription: false,
           ),
           const SizedBox(height: 32.0),
-          Text(tr(LocaleKeys.purchase_screen_oneTime_desc)),
+          Text(context.loc.purchaseScreenOneTimeDesc),
         ],
         mainAxisAlignment: MainAxisAlignment.start,
       ),

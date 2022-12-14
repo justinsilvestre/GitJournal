@@ -5,18 +5,15 @@
  */
 
 import 'package:flutter/material.dart';
-
-import 'package:easy_localization/easy_localization.dart';
-import 'package:provider/provider.dart';
-
-import 'package:gitjournal/generated/locale_keys.g.dart';
+import 'package:gitjournal/l10n.dart';
 import 'package:gitjournal/repository.dart';
 import 'package:gitjournal/repository_manager.dart';
 import 'package:gitjournal/settings/git_config.dart';
 import 'package:gitjournal/settings/settings_git_remote.dart';
 import 'package:gitjournal/settings/settings_git_widgets.dart';
 import 'package:gitjournal/settings/widgets/settings_header.dart';
-import 'package:gitjournal/settings/widgets/settings_list_option_preference.dart';
+import 'package:gitjournal/settings/widgets/settings_list_preference.dart';
+import 'package:provider/provider.dart';
 
 class SettingsGit extends StatelessWidget {
   static const routePath = '/settings/git';
@@ -30,12 +27,12 @@ class SettingsGit extends StatelessWidget {
 
     var list = ListView(
       children: [
-        SettingsHeader(tr(LocaleKeys.settings_gitAuthor)),
+        SettingsHeader(context.loc.settingsGitAuthor),
         const GitAuthor(),
         const GitAuthorEmail(),
         ListTile(
-          title: Text(tr(LocaleKeys.settings_gitRemote_title)),
-          subtitle: Text(tr(LocaleKeys.settings_gitRemote_subtitle)),
+          title: Text(context.loc.settingsGitRemoteTitle),
+          subtitle: Text(context.loc.settingsGitRemoteSubtitle),
           onTap: () {
             var route = MaterialPageRoute(
               builder: (context) => GitRemoteSettingsScreen(),
@@ -47,25 +44,27 @@ class SettingsGit extends StatelessWidget {
           },
           enabled: repo.remoteGitRepoConfigured,
         ),
-        ListOptionPreference<SettingsSSHKey>(
-          title: tr(LocaleKeys.settings_sshKey_keyType),
-          currentOption: SettingsSSHKey.fromEnum(gitConfig.sshKeyType),
-          values: SettingsSSHKey.values,
-          defaultValue: SettingsSSHKey.Default,
-          onChange: (keyType) {
-            gitConfig.sshKeyType = keyType.val;
+        ListPreference(
+          title: context.loc.settingsSshKeyKeyType,
+          currentOption: SettingsSSHKey.fromEnum(gitConfig.sshKeyType)
+              .toPublicString(context),
+          options: SettingsSSHKey.options
+              .map((f) => f.toPublicString(context))
+              .toList(),
+          onChange: (String publicStr) {
+            var val = SettingsSSHKey.fromPublicString(context, publicStr);
+            gitConfig.sshKeyType = val.toEnum();
             gitConfig.save();
           },
         ),
         RedButton(
-          text: tr(LocaleKeys.settings_deleteRepo),
+          text: context.loc.settingsDeleteRepo,
           onPressed: () async {
             var ok = await showDialog(
               context: context,
               builder: (_) => IrreversibleActionConfirmationDialog(
-                title: LocaleKeys.settings_deleteRepo.tr(),
-                subtitle:
-                    LocaleKeys.settings_gitRemote_changeHost_subtitle.tr(),
+                title: context.loc.settingsDeleteRepo,
+                subtitle: context.loc.settingsGitRemoteChangeHostSubtitle,
               ),
             );
             if (ok == null) {
@@ -83,7 +82,7 @@ class SettingsGit extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(LocaleKeys.settings_list_git_title.tr()),
+        title: Text(context.loc.settingsListGitTitle),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {

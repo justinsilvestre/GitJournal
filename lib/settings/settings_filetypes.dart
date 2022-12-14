@@ -5,16 +5,13 @@
  */
 
 import 'package:flutter/material.dart';
-
-import 'package:easy_localization/easy_localization.dart';
-import 'package:path/path.dart' as p;
-import 'package:provider/provider.dart';
-
 import 'package:gitjournal/core/file/file.dart';
 import 'package:gitjournal/core/folder/notes_folder.dart';
 import 'package:gitjournal/core/folder/notes_folder_fs.dart';
-import 'package:gitjournal/generated/locale_keys.g.dart';
+import 'package:gitjournal/l10n.dart';
 import 'package:gitjournal/repository.dart';
+import 'package:path/path.dart' as p;
+import 'package:provider/provider.dart';
 
 class NoteFileTypesSettings extends StatefulWidget {
   static const routePath = '/settings/fileTypes';
@@ -79,7 +76,7 @@ class _NoteFileTypesSettingsState extends State<NoteFileTypesSettings> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(tr(LocaleKeys.settings_fileTypes_title)),
+        title: Text(context.loc.settingsFileTypesTitle),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
@@ -95,7 +92,7 @@ class _NoteFileTypesSettingsState extends State<NoteFileTypesSettings> {
     var textTheme = Theme.of(context).textTheme;
     var title = info.ext;
     if (title.isEmpty) {
-      title = LocaleKeys.settings_fileTypes_noExt.tr();
+      title = context.loc.settingsFileTypesNoExt;
     }
 
     return CheckboxListTile(
@@ -105,7 +102,7 @@ class _NoteFileTypesSettingsState extends State<NoteFileTypesSettings> {
         style: textTheme.subtitle1!.copyWith(fontFamily: "Roboto Mono"),
       ),
       secondary: Text(
-        LocaleKeys.settings_fileTypes_numFiles.plural(info.count),
+        context.loc.settingsFileTypesNumFiles(info.count),
         style: textTheme.subtitle2,
       ),
       controlAffinity: ListTileControlAffinity.leading,

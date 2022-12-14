@@ -6,13 +6,10 @@
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-
-import 'package:easy_localization/easy_localization.dart';
-import 'package:url_launcher/url_launcher.dart';
-
 import 'package:gitjournal/analytics/analytics.dart';
 import 'package:gitjournal/features.dart';
-import 'package:gitjournal/generated/locale_keys.g.dart';
+import 'package:gitjournal/l10n.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class FeatureTimelineScreen extends StatelessWidget {
   const FeatureTimelineScreen({super.key});
@@ -23,22 +20,22 @@ class FeatureTimelineScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(tr(LocaleKeys.feature_timeline_title)),
+        title: Text(context.loc.featureTimelineTitle),
       ),
       body: ListView(
         children: [
           for (var feature in Features.all) FeatureTile(feature),
           for (var title in Features.inProgress)
             _Tile(
-              title: title,
-              subTitle: tr(LocaleKeys.feature_timeline_progress),
+              title: context.tr(title),
+              subTitle: context.loc.featureTimelineProgress,
               iconText: "DEV",
               iconColor: theme.primaryColorDark,
             ),
           for (var title in Features.planned)
             _Tile(
-              title: title,
-              subTitle: tr(LocaleKeys.feature_timeline_plan),
+              title: context.tr(title),
+              subTitle: context.loc.featureTimelinePlan,
               iconText: "PLAN",
               iconColor: theme.colorScheme.secondary,
             ),
@@ -58,8 +55,8 @@ class FeatureTile extends StatelessWidget {
   Widget build(BuildContext context) {
     var dateStr = feature.date.toIso8601String().substring(0, 10);
     var subtitle = dateStr;
-    if (feature.subtitle.isNotEmpty) {
-      subtitle += ' - ' + feature.subtitle;
+    if (feature.subtitle != Lk.empty) {
+      subtitle += ' - ' + context.tr(feature.subtitle);
     }
 
     var theme = Theme.of(context);
@@ -72,7 +69,7 @@ class FeatureTile extends StatelessWidget {
     }
 
     return _Tile(
-      title: feature.title,
+      title: context.tr(feature.title),
       subTitle: subtitle,
       iconText: feature.pro ? 'PRO' : "FREE",
       iconColor: color,
@@ -166,7 +163,7 @@ class _DevelopmentText extends StatelessWidget {
   Widget build(BuildContext context) {
     var style = Theme.of(context).textTheme.bodyText2;
 
-    var str = tr(LocaleKeys.feature_timeline_issues);
+    var str = context.loc.featureTimelineIssues;
     var i = str.toLowerCase().indexOf('github');
     if (i == -1) {
       return Padding(

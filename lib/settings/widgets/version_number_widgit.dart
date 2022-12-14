@@ -6,11 +6,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
-import 'package:easy_localization/easy_localization.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
-import 'package:gitjournal/generated/locale_keys.g.dart';
+import 'package:gitjournal/l10n.dart';
 import 'package:gitjournal/utils/utils.dart';
 
 class VersionNumberTile extends StatefulWidget {
@@ -46,12 +43,11 @@ class VersionNumberTileState extends State<VersionNumberTile> {
         FontAwesomeIcons.stamp,
         color: textTheme.subtitle1!.color,
       ),
-      title:
-          Text(tr(LocaleKeys.settings_versionInfo), style: textTheme.subtitle1),
+      title: Text(context.loc.settingsVersionInfo, style: textTheme.subtitle1),
       subtitle: Text(versionText),
       onTap: () {
         Clipboard.setData(ClipboardData(text: versionText));
-        showSnackbar(context, tr(LocaleKeys.settings_versionCopied));
+        showSnackbar(context, context.loc.settingsVersionCopied);
       },
     );
   }

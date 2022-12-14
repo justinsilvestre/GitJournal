@@ -5,9 +5,7 @@
  */
 
 import 'package:flutter/material.dart';
-
-import 'package:easy_localization/easy_localization.dart';
-import 'package:gitjournal/generated/locale_keys.g.dart';
+import 'package:gitjournal/l10n.dart';
 
 import 'error.dart';
 import 'git_transfer_progress.dart';
@@ -15,17 +13,17 @@ import 'loading.dart';
 
 class GitHostCloningPage extends StatelessWidget {
   final String? errorMessage;
-  final String loadingMessage;
   final GitTransferProgress cloneProgress;
 
   GitHostCloningPage({
     required this.errorMessage,
     required this.cloneProgress,
     super.key,
-  }) : loadingMessage = tr(LocaleKeys.setup_cloning);
+  });
 
   @override
   Widget build(BuildContext context) {
+    var loadingMessage = context.loc.setupCloning;
     if (errorMessage != null && errorMessage!.isNotEmpty) {
       return GitHostSetupErrorPage(errorMessage!);
     }

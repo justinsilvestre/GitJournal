@@ -6,15 +6,12 @@
  */
 
 import 'package:flutter/material.dart';
-
-import 'package:easy_localization/easy_localization.dart';
-import 'package:provider/provider.dart';
-
-import 'package:gitjournal/generated/locale_keys.g.dart';
+import 'package:gitjournal/l10n.dart';
 import 'package:gitjournal/settings/markdown_renderer_config.dart';
 import 'package:gitjournal/settings/settings.dart';
 import 'package:gitjournal/settings/widgets/settings_header.dart';
 import 'package:gitjournal/settings/widgets/settings_list_preference.dart';
+import 'package:provider/provider.dart';
 
 class SettingsDisplayImagesCaptionScreen extends StatefulWidget {
   @override
@@ -42,23 +39,22 @@ class SettingsDisplayImagesCaptionScreenState
         key: doNotCaptionTagsKey,
         style: Theme.of(context).textTheme.headline6,
         decoration: InputDecoration(
-          hintText: tr(
-              LocaleKeys.settings_display_images_captions_doCaptionTags_hint),
-          labelText: tr(
-              LocaleKeys.settings_display_images_captions_doCaptionTags_label),
+          hintText: context.loc.settingsDisplayImagesCaptionsDoCaptionTagsHint,
+          labelText:
+              context.loc.settingsDisplayImagesCaptionsDoCaptionTagsLabel,
         ),
         validator: (String? value) {
           value = value!.trim();
           if (parseTags(value).isEmpty) {
-            return tr(LocaleKeys
-                .settings_display_images_captions_doCaptionTags_validator_empty);
+            return context
+                .loc.settingsDisplayImagesCaptionsDoCaptionTagsValidatorEmpty;
           }
 
           if (parseTags(value)
               .intersection(settings.doCaptionTags)
               .isNotEmpty) {
-            return tr(LocaleKeys
-                .settings_display_images_captions_doCaptionTags_validator_same);
+            return context
+                .loc.settingsDisplayImagesCaptionsDoCaptionTagsValidatorSame;
           }
 
           return null;
@@ -87,22 +83,21 @@ class SettingsDisplayImagesCaptionScreenState
         key: doCaptionTagsKey,
         style: Theme.of(context).textTheme.headline6,
         decoration: InputDecoration(
-          hintText: tr(
-              LocaleKeys.settings_display_images_captions_doCaptionTags_hint),
-          labelText: tr(
-              LocaleKeys.settings_display_images_captions_doCaptionTags_label),
+          hintText: context.loc.settingsDisplayImagesCaptionsDoCaptionTagsHint,
+          labelText:
+              context.loc.settingsDisplayImagesCaptionsDoCaptionTagsLabel,
         ),
         validator: (String? value) {
           if (parseTags(value!).isEmpty) {
-            return tr(LocaleKeys
-                .settings_display_images_captions_doCaptionTags_validator_empty);
+            return context
+                .loc.settingsDisplayImagesCaptionsDoCaptionTagsValidatorEmpty;
           }
 
           if (parseTags(value)
               .intersection(settings.doNotCaptionTags)
               .isNotEmpty) {
-            return tr(LocaleKeys
-                .settings_display_images_captions_doCaptionTags_validator_same);
+            return context
+                .loc.settingsDisplayImagesCaptionsDoCaptionTagsValidatorSame;
           }
 
           return null;
@@ -120,21 +115,20 @@ class SettingsDisplayImagesCaptionScreenState
 
     var body = ListView(children: <Widget>[
       ListPreference(
-        title: tr(LocaleKeys.settings_display_images_captions_useAsCaption),
-        currentOption: settings.useAsCaption.toPublicString(),
+        title: context.loc.settingsDisplayImagesCaptionsUseAsCaption,
+        currentOption: settings.useAsCaption.toPublicString(context),
         options: SettingsImageTextType.options
-            .map((e) => e.toPublicString())
+            .map((e) => e.toPublicString(context))
             .toList(),
         onChange: (String publicStr) {
           settings.useAsCaption =
-              SettingsImageTextType.fromPublicString(publicStr);
+              SettingsImageTextType.fromPublicString(context, publicStr);
           settings.save();
           setState(() {});
         },
       ),
       SwitchListTile(
-        title: Text(
-            tr(LocaleKeys.settings_display_images_captions_overlayCaption)),
+        title: Text(context.loc.settingsDisplayImagesCaptionsOverlayCaption),
         value: settings.overlayCaption,
         onChanged: (bool newVal) {
           settings.overlayCaption = newVal;
@@ -143,8 +137,8 @@ class SettingsDisplayImagesCaptionScreenState
       ),
       if (settings.overlayCaption)
         SwitchListTile(
-          title: Text(tr(
-              LocaleKeys.settings_display_images_captions_transparentCaption)),
+          title:
+              Text(context.loc.settingsDisplayImagesCaptionsTransparentCaption),
           value: settings.transparentCaption,
           onChanged: (bool newVal) {
             settings.transparentCaption = newVal;
@@ -153,8 +147,8 @@ class SettingsDisplayImagesCaptionScreenState
         ),
       if (settings.overlayCaption && settings.transparentCaption)
         SwitchListTile(
-          title: Text(tr(
-              LocaleKeys.settings_display_images_captions_blurBehindCaption)),
+          title:
+              Text(context.loc.settingsDisplayImagesCaptionsBlurBehindCaption),
           value: settings.blurBehindCaption,
           onChanged: (bool newVal) {
             settings.blurBehindCaption = newVal;
@@ -162,26 +156,23 @@ class SettingsDisplayImagesCaptionScreenState
           },
         ),
       SwitchListTile(
-        title: Text(
-            tr(LocaleKeys.settings_display_images_captions_tooltipFirst_title)),
+        title: Text(context.loc.settingsDisplayImagesCaptionsTooltipFirstTitle),
         value: settings.tooltipFirst,
         subtitle: settings.tooltipFirst
-            ? Text(tr(LocaleKeys
-                .settings_display_images_captions_tooltipFirst_tooltip))
-            : Text(tr(LocaleKeys
-                .settings_display_images_captions_tooltipFirst_altText)),
+            ? Text(context.loc.settingsDisplayImagesCaptionsTooltipFirstTooltip)
+            : Text(
+                context.loc.settingsDisplayImagesCaptionsTooltipFirstAltText),
         onChanged: (bool newVal) {
           settings.tooltipFirst = newVal;
           settings.save();
         },
       ),
       SettingsHeader(
-        tr(LocaleKeys.settings_display_images_captions_captionOverrides),
+        context.loc.settingsDisplayImagesCaptionsCaptionOverrides,
       ),
       Padding(
         padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
-        child: Text(
-            tr(LocaleKeys.settings_display_images_captions_tagDescription)),
+        child: Text(context.loc.settingsDisplayImagesCaptionsTagDescription),
       ),
       ListTile(title: doCaptionTagsForm),
       ListTile(title: doNotCaptionTagsForm)
@@ -189,7 +180,7 @@ class SettingsDisplayImagesCaptionScreenState
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(tr(LocaleKeys.settings_display_images_captions_title)),
+        title: Text(context.loc.settingsDisplayImagesCaptionsTitle),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {

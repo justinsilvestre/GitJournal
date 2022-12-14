@@ -5,12 +5,9 @@
  */
 
 import 'package:flutter/material.dart';
-
-import 'package:easy_localization/easy_localization.dart';
 import 'package:function_types/function_types.dart';
-
 import 'package:gitjournal/core/folder/notes_folder_fs.dart';
-import 'package:gitjournal/generated/locale_keys.g.dart';
+import 'package:gitjournal/l10n.dart';
 
 typedef FolderSelectedCallback = void Function(NotesFolderFS folder);
 
@@ -129,14 +126,16 @@ class FolderTileState extends State<FolderTile> {
           )
         : null;
 
-    final subtitle = LocaleKeys.widgets_FolderTreeView_notesCount.tr(
-      args: [folder.numberOfNotes.toString()],
-    );
+    final subtitle = context.loc
+        .widgetsFolderTreeViewNotesCount(folder.numberOfNotes.toString());
 
     final theme = Theme.of(context);
 
-    var publicName =
-        folder.folderName.isEmpty ? folder.publicName : folder.folderName;
+    var publicName = folder.parent == null
+        ? context.loc.rootFolder
+        : folder.folderName.isEmpty
+            ? folder.publicName
+            : folder.folderName;
 
     var selected = widget.selectedFolder == widget.folder;
     return Card(

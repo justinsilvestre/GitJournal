@@ -4,11 +4,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import 'package:flutter/material.dart';
-
 import 'package:collection/collection.dart';
-import 'package:easy_localization/easy_localization.dart';
-
+import 'package:flutter/material.dart';
 import 'package:gitjournal/core/folder/notes_folder.dart';
 import 'package:gitjournal/core/folder/notes_folder_fs.dart';
 import 'package:gitjournal/core/link.dart';
@@ -16,6 +13,7 @@ import 'package:gitjournal/core/note.dart';
 import 'package:gitjournal/core/views/note_links_view.dart';
 import 'package:gitjournal/features.dart';
 import 'package:gitjournal/folder_views/common.dart';
+import 'package:gitjournal/l10n.dart';
 import 'package:gitjournal/utils/link_resolver.dart';
 import 'package:gitjournal/widgets/future_builder_with_progress.dart';
 import 'package:gitjournal/widgets/pro_overlay.dart';
@@ -86,7 +84,7 @@ class _NoteBacklinkRendererState extends State<NoteBacklinkRenderer> {
     var c = Column(
       children: <Widget>[
         Text(
-          plural("widgets.backlinks.title", num),
+          context.loc.widgetsBacklinksTitle(num),
           style: textTheme.headline6,
         ),
         const SizedBox(height: 8.0),

@@ -5,14 +5,11 @@
  */
 
 import 'package:flutter/material.dart';
-
-import 'package:easy_localization/easy_localization.dart';
-import 'package:provider/provider.dart';
-
 import 'package:gitjournal/core/folder/notes_folder_config.dart';
-import 'package:gitjournal/generated/locale_keys.g.dart';
+import 'package:gitjournal/l10n.dart';
 import 'package:gitjournal/settings/settings.dart';
 import 'package:gitjournal/settings/widgets/settings_header.dart';
+import 'package:provider/provider.dart';
 
 class SettingsMisc extends StatefulWidget {
   static const routePath = '/settings/misc';
@@ -29,9 +26,9 @@ class _SettingsMiscState extends State<SettingsMisc> {
 
     var body = Column(
       children: <Widget>[
-        SettingsHeader(tr(LocaleKeys.settings_misc_listView)),
+        SettingsHeader(context.loc.settingsMiscListView),
         SwitchListTile(
-          title: Text(tr(LocaleKeys.settings_misc_swipe)),
+          title: Text(context.loc.settingsMiscSwipe),
           value: settings.swipeToDelete,
           onChanged: (bool newVal) {
             settings.swipeToDelete = newVal;
@@ -39,7 +36,7 @@ class _SettingsMiscState extends State<SettingsMisc> {
           },
         ),
         SwitchListTile(
-          title: Text(tr(LocaleKeys.settings_misc_confirmDelete)),
+          title: Text(context.loc.settingsMiscConfirmDelete),
           value: settings.confirmDelete,
           onChanged: (bool newVal) {
             settings.confirmDelete = newVal;
@@ -47,7 +44,7 @@ class _SettingsMiscState extends State<SettingsMisc> {
           },
         ),
         SwitchListTile(
-          title: Text(tr(LocaleKeys.settings_misc_hardWrap)),
+          title: Text(context.loc.settingsMiscHardWrap),
           value: settings.hardWrap,
           onChanged: (bool newVal) {
             settings.hardWrap = newVal;
@@ -55,7 +52,7 @@ class _SettingsMiscState extends State<SettingsMisc> {
           },
         ),
         SwitchListTile(
-          title: Text(tr(LocaleKeys.settings_misc_emoji)),
+          title: Text(context.loc.settingsMiscEmoji),
           value: folderConfig.emojify,
           onChanged: (bool newVal) {
             folderConfig.emojify = newVal;
@@ -68,7 +65,7 @@ class _SettingsMiscState extends State<SettingsMisc> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(tr(LocaleKeys.settings_misc_title)),
+        title: Text(context.loc.settingsMiscTitle),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {

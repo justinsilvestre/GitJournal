@@ -5,14 +5,13 @@
  */
 
 import 'package:flutter/material.dart';
-
-import 'package:easy_localization/easy_localization.dart';
 import 'package:function_types/function_types.dart';
 import 'package:gitjournal/analytics/analytics.dart';
 import 'package:gitjournal/error_reporting.dart';
-import 'package:gitjournal/generated/locale_keys.g.dart';
+import 'package:gitjournal/l10n.dart';
 import 'package:gitjournal/logger/logger.dart';
 import 'package:gitjournal/widgets/highlighted_text.dart';
+import 'package:intl/intl.dart';
 import 'package:path/path.dart' as p;
 import 'package:time/time.dart';
 import 'package:timeago/timeago.dart' as timeago;
@@ -135,7 +134,7 @@ class GitHostSetupRepoSelectorState extends State<GitHostSetupRepoSelector> {
       return GitHostSetupErrorPage(errorMessage);
     }
     if (!fetchedRepos) {
-      return GitHostSetupLoadingPage(tr(LocaleKeys.setup_repoSelector_loading));
+      return GitHostSetupLoadingPage(context.loc.setupRepoSelectorLoading);
     }
 
     var q = _textController.text.toLowerCase();
@@ -182,7 +181,7 @@ class GitHostSetupRepoSelectorState extends State<GitHostSetupRepoSelector> {
       controller: _textController,
       maxLines: 1,
       decoration: InputDecoration(
-        hintText: tr(LocaleKeys.setup_repoSelector_hint),
+        hintText: context.loc.setupRepoSelectorHint,
         border: const OutlineInputBorder(),
         suffixIcon: IconButton(
           onPressed: () => _textController.clear(),
@@ -197,7 +196,7 @@ class GitHostSetupRepoSelectorState extends State<GitHostSetupRepoSelector> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Text(
-          tr(LocaleKeys.setup_repoSelector_title),
+          context.loc.setupRepoSelectorTitle,
           style: Theme.of(context).textTheme.headline6,
         ),
         const SizedBox(height: 16.0),
@@ -206,7 +205,7 @@ class GitHostSetupRepoSelectorState extends State<GitHostSetupRepoSelector> {
         Expanded(child: repoBuilder),
         const SizedBox(height: 8.0),
         GitHostSetupButton(
-          text: tr(LocaleKeys.setup_next),
+          text: context.loc.setupNext,
           enabled: canContinue,
           onPressed: () async {
             if (selectedRepo != null) {
@@ -239,7 +238,7 @@ class GitHostSetupRepoSelectorState extends State<GitHostSetupRepoSelector> {
       leading: const Icon(Icons.add),
       title: Align(
         child: Text(
-          tr(LocaleKeys.setup_repoSelector_create, args: [fullRepoName]),
+          context.loc.setupRepoSelectorCreate(fullRepoName),
         ),
         alignment: const Alignment(-1.3, 0),
       ),

@@ -4,13 +4,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import 'package:flutter/material.dart';
-
-import 'package:easy_localization/easy_localization.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
-import 'package:gitjournal/generated/locale_keys.g.dart';
+import 'package:gitjournal/l10n.dart';
 
 class NoteTagEditor extends StatefulWidget {
   final ISet<String> selectedTags;
@@ -60,7 +57,7 @@ class _NoteTagEditorState extends State<NoteTagEditor> {
           style: theme.textTheme.headline6,
           decoration: InputDecoration(
             border: InputBorder.none,
-            hintText: tr(LocaleKeys.editors_common_tags),
+            hintText: context.loc.editorsCommonTags,
             hintStyle: theme.inputDecorationTheme.hintStyle,
           ),
           onSubmitted: _addTag,

@@ -5,10 +5,8 @@
  */
 
 import 'package:flutter/material.dart';
-
-import 'package:easy_localization/easy_localization.dart';
 import 'package:function_types/function_types.dart';
-import 'package:gitjournal/generated/locale_keys.g.dart';
+import 'package:gitjournal/l10n.dart';
 
 import 'button.dart';
 import 'key_editors.dart';
@@ -33,7 +31,7 @@ class GitHostSetupSshKeyKnownProviderPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (publicKey == null || publicKey!.isEmpty) {
-      return GitHostSetupLoadingPage(tr("setup.sshKey.generate"));
+      return GitHostSetupLoadingPage(context.loc.setupSshKeyGenerate);
     }
 
     var columns = Column(
@@ -41,14 +39,14 @@ class GitHostSetupSshKeyKnownProviderPage extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Text(
-          tr("setup.sshKey.title"),
+          context.loc.setupSshKeyTitle,
           style: Theme.of(context).textTheme.headline6,
         ),
         const SizedBox(height: 32.0),
 
         // Step 1
         Text(
-          tr("setup.sshKey.step1"),
+          context.loc.setupSshKeyStep1,
           style: Theme.of(context).textTheme.subtitle2,
         ),
         const SizedBox(height: 8.0),
@@ -56,35 +54,35 @@ class GitHostSetupSshKeyKnownProviderPage extends StatelessWidget {
         const SizedBox(height: 8.0),
 
         GitHostSetupButton(
-          text: tr("setup.sshKey.copy"),
+          text: context.loc.setupSshKeyCopy,
           onPressed: () => copyKeyFunction(context),
         ),
         GitHostSetupButton(
-          text: tr("setup.sshKey.regenerate"),
+          text: context.loc.setupSshKeyRegenerate,
           onPressed: regenerateFunction,
         ),
         const SizedBox(height: 16.0),
 
         // Step 2
         Text(
-          tr("setup.sshKey.step2a"),
+          context.loc.setupSshKeyStep2a,
           style: Theme.of(context).textTheme.subtitle2,
         ),
         const SizedBox(height: 8.0),
         GitHostSetupButton(
-          text: tr("setup.sshKey.openDeploy"),
+          text: context.loc.setupSshKeyOpenDeploy,
           onPressed: openDeployKeyPage,
         ),
         const SizedBox(height: 16.0),
 
         // Step 3
         Text(
-          tr("setup.sshKey.step3"),
+          context.loc.setupSshKeyStep3,
           style: Theme.of(context).textTheme.subtitle2,
         ),
         const SizedBox(height: 8.0),
         GitHostSetupButton(
-          text: tr("setup.sshKey.clone"),
+          text: context.loc.setupSshKeyClone,
           onPressed: doneFunction,
         ),
       ],
@@ -114,7 +112,7 @@ class GitHostSetupSshKeyUnknownProviderPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (publicKey == null || publicKey!.isEmpty) {
-      return GitHostSetupLoadingPage(tr("setup.sshKey.generate"));
+      return GitHostSetupLoadingPage(context.loc.setupSshKeyGenerate);
     }
 
     var columns = Column(
@@ -122,14 +120,14 @@ class GitHostSetupSshKeyUnknownProviderPage extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Text(
-          tr("setup.sshKey.title"),
+          context.loc.setupSshKeyTitle,
           style: Theme.of(context).textTheme.headline6,
         ),
         const SizedBox(height: 32.0),
 
         // Step 1
         Text(
-          tr("setup.sshKey.step1"),
+          context.loc.setupSshKeyStep1,
           style: Theme.of(context).textTheme.subtitle2,
         ),
         const SizedBox(height: 8.0),
@@ -137,30 +135,30 @@ class GitHostSetupSshKeyUnknownProviderPage extends StatelessWidget {
         const SizedBox(height: 8.0),
 
         GitHostSetupButton(
-          text: tr("setup.sshKey.copy"),
+          text: context.loc.setupSshKeyCopy,
           onPressed: () => copyKeyFunction(context),
         ),
         GitHostSetupButton(
-          text: tr("setup.sshKey.regenerate"),
+          text: context.loc.setupSshKeyRegenerate,
           onPressed: regenerateFunction,
         ),
         const SizedBox(height: 16.0),
 
         // Step 2
         Text(
-          tr("setup.sshKey.step2b"),
+          context.loc.setupSshKeyStep2b,
           style: Theme.of(context).textTheme.subtitle2,
         ),
         const SizedBox(height: 16.0),
 
         // Step 3
         Text(
-          tr("setup.sshKey.step3"),
+          context.loc.setupSshKeyStep3,
           style: Theme.of(context).textTheme.subtitle2,
         ),
         const SizedBox(height: 8.0),
         GitHostSetupButton(
-          text: tr("setup.sshKey.clone"),
+          text: context.loc.setupSshKeyClone,
           onPressed: doneFunction,
         ),
       ],
@@ -188,17 +186,17 @@ class GitHostSetupKeyChoicePage extends StatelessWidget {
     return Column(
       children: <Widget>[
         Text(
-          tr("setup.sshKeyChoice.title"),
+          context.loc.setupSshKeyChoiceTitle,
           style: Theme.of(context).textTheme.headline5,
         ),
         const SizedBox(height: 16.0),
         GitHostSetupButton(
-          text: tr("setup.sshKeyChoice.generate"),
+          text: context.loc.setupSshKeyChoiceGenerate,
           onPressed: onGenerateKeys,
         ),
         const SizedBox(height: 8.0),
         GitHostSetupButton(
-          text: tr("setup.sshKeyChoice.custom"),
+          text: context.loc.setupSshKeyChoiceCustom,
           onPressed: onUserProvidedKeys,
         ),
       ],
@@ -244,7 +242,7 @@ class _GitHostUserProvidedKeysPageState
     _passwordController = TextEditingController();
 
     saveText =
-        widget.saveText.isEmpty ? tr(LocaleKeys.setup_next) : widget.saveText;
+        widget.saveText.isEmpty ? context.loc.setupNext : widget.saveText;
   }
 
   @override
@@ -260,14 +258,14 @@ class _GitHostUserProvidedKeysPageState
     var body = Column(
       children: <Widget>[
         Text(
-          tr(LocaleKeys.setup_sshKeyUserProvided_public),
+          context.loc.setupSshKeyUserProvidedPublic,
           style: Theme.of(context).textTheme.headline5,
         ),
         const SizedBox(height: 8.0),
         PublicKeyEditor(_publicFormKey, _publicKeyController),
         const SizedBox(height: 8.0),
         Text(
-          tr(LocaleKeys.setup_sshKeyUserProvided_private),
+          context.loc.setupSshKeyUserProvidedPrivate,
           style: Theme.of(context).textTheme.headline5,
         ),
         const SizedBox(height: 8.0),
@@ -277,7 +275,7 @@ class _GitHostUserProvidedKeysPageState
           controller: _passwordController,
           maxLines: 1,
           decoration: InputDecoration(
-            helperText: tr(LocaleKeys.setup_sshKeyUserProvided_password),
+            helperText: context.loc.setupSshKeyUserProvidedPassword,
             border: const OutlineInputBorder(),
             isDense: true,
           ),

@@ -6,11 +6,7 @@
 
 import 'package:flutter/foundation.dart' as foundation;
 import 'package:flutter/material.dart';
-
-import 'package:easy_localization/easy_localization.dart';
 import 'package:git_bindings/git_bindings.dart';
-import 'package:provider/provider.dart';
-
 import 'package:gitjournal/analytics/analytics.dart';
 import 'package:gitjournal/app_router.dart';
 import 'package:gitjournal/core/folder/filtered_notes_folder.dart';
@@ -24,7 +20,7 @@ import 'package:gitjournal/editors/common_types.dart';
 import 'package:gitjournal/editors/note_editor.dart';
 import 'package:gitjournal/folder_views/common.dart';
 import 'package:gitjournal/folder_views/standard_view.dart';
-import 'package:gitjournal/generated/locale_keys.g.dart';
+import 'package:gitjournal/l10n.dart';
 import 'package:gitjournal/repository.dart';
 import 'package:gitjournal/settings/settings.dart';
 import 'package:gitjournal/settings/widgets/settings_header.dart';
@@ -37,6 +33,8 @@ import 'package:gitjournal/widgets/note_delete_dialog.dart';
 import 'package:gitjournal/widgets/note_search_delegate.dart';
 import 'package:gitjournal/widgets/sorting_mode_selector.dart';
 import 'package:gitjournal/widgets/sync_button.dart';
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 enum DropDownChoices {
   SortingOptions,
@@ -74,7 +72,8 @@ class _FolderViewState extends State<FolderView> {
   @override
   void initState() {
     super.initState();
-    _init();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => _init());
   }
 
   Future<void> _init() async {
@@ -85,7 +84,7 @@ class _FolderViewState extends State<FolderView> {
     var otherNotesFolder = SortedNotesFolder(
       folder: await FilteredNotesFolder.load(
         widget.notesFolder,
-        title: LocaleKeys.widgets_FolderView_pinned,
+        title: context.loc.widgetsFolderViewPinned,
         filter: (Note note) async => !note.pinned,
       ),
       sortingMode: widget.notesFolder.config.sortingMode,
@@ -94,7 +93,7 @@ class _FolderViewState extends State<FolderView> {
     var pinnedFolder = SortedNotesFolder(
       folder: await FilteredNotesFolder.load(
         widget.notesFolder,
-        title: LocaleKeys.widgets_FolderView_pinned,
+        title: context.loc.widgetsFolderViewPinned,
         filter: (Note note) async => note.pinned,
       ),
       sortingMode: widget.notesFolder.config.sortingMode,
@@ -135,7 +134,7 @@ class _FolderViewState extends State<FolderView> {
     var folderView = buildFolderView(
       viewType: _viewType,
       folder: _sortedNotesFolder!,
-      emptyText: tr(LocaleKeys.screens_folder_view_empty),
+      emptyText: context.loc.screensFolderViewEmpty,
       header: _headerType,
       showSummary: _showSummary,
       noteTapped: _noteTapped,
@@ -199,10 +198,10 @@ class _FolderViewState extends State<FolderView> {
           child: Builder(builder: (context) {
             var view = CustomScrollView(slivers: [
               if (havePinnedNotes)
-                _SliverHeader(text: LocaleKeys.widgets_FolderView_pinned.tr()),
+                _SliverHeader(text: context.loc.widgetsFolderViewPinned),
               if (havePinnedNotes) pinnedFolderView,
               if (havePinnedNotes)
-                _SliverHeader(text: LocaleKeys.widgets_FolderView_others.tr()),
+                _SliverHeader(text: context.loc.widgetsFolderViewOthers),
               folderView,
             ]);
             if (settings.remoteSyncFrequency == RemoteSyncFrequency.Manual) {
@@ -293,8 +292,7 @@ class _FolderViewState extends State<FolderView> {
         if (!isVirtualFolder) {
           showSnackbar(
             context,
-            LocaleKeys.settings_editors_journalDefaultFolderSelect
-                .tr(args: [spec]),
+            context.loc.settingsEditorsJournalDefaultFolderSelect(spec),
           );
         }
       }
@@ -389,11 +387,10 @@ class _FolderViewState extends State<FolderView> {
         return StatefulBuilder(
           builder: (BuildContext context, setState) {
             var children = <Widget>[
-              SettingsHeader(
-                  tr(LocaleKeys.widgets_FolderView_headerOptions_heading)),
+              SettingsHeader(context.loc.widgetsFolderViewHeaderOptionsHeading),
               RadioListTile<StandardViewHeader>(
-                title: Text(tr(
-                    LocaleKeys.widgets_FolderView_headerOptions_titleFileName)),
+                title: Text(
+                    context.loc.widgetsFolderViewHeaderOptionsTitleFileName),
                 value: StandardViewHeader.TitleOrFileName,
                 groupValue: _headerType,
                 onChanged: (newVal) {
@@ -402,8 +399,7 @@ class _FolderViewState extends State<FolderView> {
                 },
               ),
               RadioListTile<StandardViewHeader>(
-                title:
-                    Text(tr(LocaleKeys.widgets_FolderView_headerOptions_auto)),
+                title: Text(context.loc.widgetsFolderViewHeaderOptionsAuto),
                 value: StandardViewHeader.TitleGenerated,
                 groupValue: _headerType,
                 onChanged: (newVal) {
@@ -413,8 +409,7 @@ class _FolderViewState extends State<FolderView> {
               ),
               RadioListTile<StandardViewHeader>(
                 key: const ValueKey("ShowFileNameOnly"),
-                title: Text(
-                    tr(LocaleKeys.widgets_FolderView_headerOptions_fileName)),
+                title: Text(context.loc.widgetsFolderViewHeaderOptionsFileName),
                 value: StandardViewHeader.FileName,
                 groupValue: _headerType,
                 onChanged: (newVal) {
@@ -424,8 +419,7 @@ class _FolderViewState extends State<FolderView> {
               ),
               SwitchListTile(
                 key: const ValueKey("SummaryToggle"),
-                title: Text(
-                    tr(LocaleKeys.widgets_FolderView_headerOptions_summary)),
+                title: Text(context.loc.widgetsFolderViewHeaderOptionsSummary),
                 value: _showSummary,
                 onChanged: (bool newVal) {
                   setState(() {
@@ -439,8 +433,8 @@ class _FolderViewState extends State<FolderView> {
             return AlertDialog(
               title: GestureDetector(
                 key: const ValueKey("Hack_Back"),
-                child: Text(
-                    tr(LocaleKeys.widgets_FolderView_headerOptions_customize)),
+                child:
+                    Text(context.loc.widgetsFolderViewHeaderOptionsCustomize),
                 onTap: () {
                   // Hack to get out of the dialog in the tests
                   // driver.findByType('ModalBarrier') doesn't seem to be working
@@ -472,31 +466,31 @@ class _FolderViewState extends State<FolderView> {
       builder: (BuildContext context) {
         var children = <Widget>[
           RadioListTile<FolderViewType>(
-            title: Text(tr(LocaleKeys.widgets_FolderView_views_standard)),
+            title: Text(context.loc.widgetsFolderViewViewsStandard),
             value: FolderViewType.Standard,
             groupValue: _viewType,
             onChanged: onViewChange,
           ),
           RadioListTile<FolderViewType>(
-            title: Text(tr(LocaleKeys.widgets_FolderView_views_journal)),
+            title: Text(context.loc.widgetsFolderViewViewsJournal),
             value: FolderViewType.Journal,
             groupValue: _viewType,
             onChanged: onViewChange,
           ),
           RadioListTile<FolderViewType>(
-            title: Text(tr(LocaleKeys.widgets_FolderView_views_grid)),
+            title: Text(context.loc.widgetsFolderViewViewsGrid),
             value: FolderViewType.Grid,
             groupValue: _viewType,
             onChanged: onViewChange,
           ),
           RadioListTile<FolderViewType>(
-            title: Text(tr(LocaleKeys.widgets_FolderView_views_card)),
+            title: Text(context.loc.widgetsFolderViewViewsCard),
             value: FolderViewType.Card,
             groupValue: _viewType,
             onChanged: onViewChange,
           ),
           // RadioListTile<FolderViewType>(
-          //   title: Text(tr(LocaleKeys.widgets_FolderView_views_calendar)),
+          //   title: Text(context.loc.widgetsFolderViewViewsCalendar),
           //   value: FolderViewType.Calendar,
           //   groupValue: _viewType,
           //   onChanged: onViewChange,
@@ -504,7 +498,7 @@ class _FolderViewState extends State<FolderView> {
         ];
 
         return AlertDialog(
-          title: Text(tr(LocaleKeys.widgets_FolderView_views_select)),
+          title: Text(context.loc.widgetsFolderViewViewsSelect),
           content: Column(
             children: children,
             mainAxisSize: MainAxisSize.min,
@@ -545,13 +539,13 @@ class _FolderViewState extends State<FolderView> {
         PopupMenuItem<DropDownChoices>(
           key: const ValueKey("SortingOptions"),
           value: DropDownChoices.SortingOptions,
-          child: Text(tr(LocaleKeys.widgets_FolderView_sortingOptions)),
+          child: Text(context.loc.widgetsFolderViewSortingOptions),
         ),
         if (_viewType == FolderViewType.Standard)
           PopupMenuItem<DropDownChoices>(
             key: const ValueKey("ViewOptions"),
             value: DropDownChoices.ViewOptions,
-            child: Text(tr(LocaleKeys.widgets_FolderView_viewOptions)),
+            child: Text(context.loc.widgetsFolderViewViewOptions),
           ),
       ],
     );
@@ -594,7 +588,7 @@ class _FolderViewState extends State<FolderView> {
           <PopupMenuEntry<NoteSelectedExtraActions>>[
         PopupMenuItem<NoteSelectedExtraActions>(
           value: NoteSelectedExtraActions.MoveToFolder,
-          child: Text(tr(LocaleKeys.widgets_FolderView_actions_moveToFolder)),
+          child: Text(context.loc.widgetsFolderViewActionsMoveToFolder),
         ),
       ],
     );
@@ -679,7 +673,7 @@ Future<void> syncRepo(BuildContext context) async {
   } on GitException catch (e) {
     showErrorMessageSnackbar(
       context,
-      tr(LocaleKeys.widgets_FolderView_syncError, args: [e.cause]),
+      context.loc.widgetsFolderViewSyncError(e.cause),
     );
   } catch (e) {
     showErrorSnackbar(context, e);

@@ -6,16 +6,10 @@
 
 import 'dart:async';
 
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
-import 'package:easy_localization/easy_localization.dart';
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:function_types/function_types.dart';
-import 'package:path/path.dart' as p;
-import 'package:provider/provider.dart';
-import 'package:synchronized/synchronized.dart';
-
 import 'package:gitjournal/core/folder/notes_folder.dart';
 import 'package:gitjournal/core/folder/notes_folder_fs.dart';
 import 'package:gitjournal/core/image.dart' as core;
@@ -33,7 +27,7 @@ import 'package:gitjournal/editors/note_editor_selector.dart';
 import 'package:gitjournal/editors/org_editor.dart';
 import 'package:gitjournal/editors/raw_editor.dart';
 import 'package:gitjournal/error_reporting.dart';
-import 'package:gitjournal/generated/locale_keys.g.dart';
+import 'package:gitjournal/l10n.dart';
 import 'package:gitjournal/logger/logger.dart';
 import 'package:gitjournal/repository.dart';
 import 'package:gitjournal/settings/settings.dart';
@@ -43,6 +37,9 @@ import 'package:gitjournal/widgets/folder_selection_dialog.dart';
 import 'package:gitjournal/widgets/note_delete_dialog.dart';
 import 'package:gitjournal/widgets/note_tag_editor.dart';
 import 'package:gitjournal/widgets/rename_dialog.dart';
+import 'package:path/path.dart' as p;
+import 'package:provider/provider.dart';
+import 'package:synchronized/synchronized.dart';
 
 class ShowUndoSnackbar {}
 
@@ -377,8 +374,8 @@ class NoteEditorState extends State<NoteEditor>
       context: context,
       builder: (_) => RenameDialog(
         oldPath: note.fileName,
-        inputDecoration: tr(LocaleKeys.widgets_NoteEditor_fileName),
-        dialogTitle: tr(LocaleKeys.widgets_NoteEditor_renameFile),
+        inputDecoration: context.loc.widgetsNoteEditorFileName,
+        dialogTitle: context.loc.widgetsNoteEditorRenameFile,
       ),
     );
     if (dialogResponse is! String) {
@@ -399,8 +396,8 @@ class NoteEditorState extends State<NoteEditor>
       if (renameResult.isFailure) {
         await showAlertDialog(
           context,
-          tr(LocaleKeys.editors_common_saveNoteFailed_title),
-          tr(LocaleKeys.editors_common_saveNoteFailed_message),
+          context.loc.editorsCommonSaveNoteFailedTitle,
+          context.loc.editorsCommonSaveNoteFailedMessage,
         );
       }
       if (!mounted) return;
@@ -430,12 +427,11 @@ class NoteEditorState extends State<NoteEditor>
         var _ = config.allowedFileExts.add(newExt);
         config.save();
 
-        var ext = newExt.isNotEmpty
-            ? newExt
-            : LocaleKeys.settings_fileTypes_noExt.tr();
+        var ext =
+            newExt.isNotEmpty ? newExt : context.loc.settingsFileTypesNoExt;
         showSnackbar(
           context,
-          LocaleKeys.widgets_NoteEditor_addType.tr(args: [ext]),
+          context.loc.widgetsNoteEditorAddType(ext),
         );
       }
     }
@@ -535,8 +531,8 @@ class NoteEditorState extends State<NoteEditor>
 
       await showAlertDialog(
         context,
-        tr(LocaleKeys.editors_common_saveNoteFailed_title),
-        tr(LocaleKeys.editors_common_saveNoteFailed_message),
+        context.loc.editorsCommonSaveNoteFailedTitle,
+        context.loc.editorsCommonSaveNoteFailedMessage,
       );
       return false;
     }

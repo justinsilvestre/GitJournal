@@ -5,14 +5,11 @@
  */
 
 import 'package:flutter/material.dart';
-
-import 'package:easy_localization/easy_localization.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:url_launcher/url_launcher.dart';
-
-import 'package:gitjournal/generated/locale_keys.g.dart';
+import 'package:gitjournal/l10n.dart';
 import 'package:gitjournal/settings/settings_screen.dart';
 import 'package:gitjournal/settings/widgets/version_number_widgit.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 const _privacyUrl = "https://gitjournal.io/privacy";
 const _termsUrl = "https://gitjournal.io/terms";
@@ -31,7 +28,7 @@ class SettingsAboutPage extends StatelessWidget {
         const VersionNumberTile(),
         SettingsTile(
           iconData: FontAwesomeIcons.userShield,
-          title: LocaleKeys.settings_privacy.tr(),
+          title: context.loc.settingsPrivacy,
           subtitle: _privacyUrl.replaceAll('https://', ''),
           onTap: () {
             var _ = launchUrl(
@@ -42,7 +39,7 @@ class SettingsAboutPage extends StatelessWidget {
         ),
         SettingsTile(
           iconData: FontAwesomeIcons.fileContract,
-          title: LocaleKeys.settings_terms.tr(),
+          title: context.loc.settingsTerms,
           subtitle: _termsUrl.replaceAll('https://', ''),
           onTap: () {
             var _ = launchUrl(
@@ -53,8 +50,8 @@ class SettingsAboutPage extends StatelessWidget {
         ),
         SettingsTile(
           iconData: FontAwesomeIcons.circleInfo,
-          title: LocaleKeys.settings_license_title.tr(),
-          subtitle: LocaleKeys.settings_license_subtitle.tr(),
+          title: context.loc.settingsLicenseTitle,
+          subtitle: context.loc.settingsLicenseSubtitle,
           onTap: () {
             showLicensePage(
               context: context,
@@ -66,7 +63,7 @@ class SettingsAboutPage extends StatelessWidget {
     );
     return Scaffold(
       appBar: AppBar(
-        title: Text(tr(LocaleKeys.settings_project_about)),
+        title: Text(context.loc.settingsProjectAbout),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {

@@ -6,15 +6,12 @@
 
 import 'dart:async';
 
-import 'package:easy_localization/easy_localization.dart';
-import 'package:in_app_purchase/in_app_purchase.dart';
-
 import 'package:gitjournal/error_reporting.dart';
-import 'package:gitjournal/generated/locale_keys.g.dart';
 import 'package:gitjournal/iap/iap.dart';
 import 'package:gitjournal/iap/purchase_slider.dart';
 import 'package:gitjournal/logger/logger.dart';
 import 'package:gitjournal/settings/app_config.dart';
+import 'package:in_app_purchase/in_app_purchase.dart';
 
 // ignore_for_file: cancel_subscriptions
 
@@ -83,7 +80,8 @@ class PurchaseManager {
         if (subStatus.isActive) {
           _deliverProduct(subStatus);
         } else {
-          _handleError(tr(LocaleKeys.widgets_PurchaseWidget_failed));
+          // FIXME: This should be translated!
+          _handleError("Purchase Failed");
           return;
         }
       } catch (err) {

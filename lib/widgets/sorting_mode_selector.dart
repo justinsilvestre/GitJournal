@@ -5,11 +5,8 @@
  */
 
 import 'package:flutter/material.dart';
-
-import 'package:easy_localization/easy_localization.dart';
-
 import 'package:gitjournal/core/folder/sorting_mode.dart';
-import 'package:gitjournal/generated/locale_keys.g.dart';
+import 'package:gitjournal/l10n.dart';
 import 'package:gitjournal/settings/widgets/settings_header.dart';
 
 class SortingModeSelector extends StatefulWidget {
@@ -35,14 +32,14 @@ class _SortingModeSelectorState extends State<SortingModeSelector> {
   @override
   Widget build(BuildContext context) {
     var children = <Widget>[
-      SettingsHeader(tr(LocaleKeys.settings_sortingMode_field)),
+      SettingsHeader(context.loc.settingsSortingModeField),
       for (var sf in SortingField.options) _buildSortingTile(sf),
-      SettingsHeader(tr(LocaleKeys.settings_sortingMode_order)),
+      SettingsHeader(context.loc.settingsSortingModeOrder),
       for (var so in SortingOrder.options) _buildSortingOrderTile(so),
     ];
 
     return AlertDialog(
-      title: Text(tr(LocaleKeys.widgets_SortingOrderSelector_title)),
+      title: Text(context.loc.widgetsSortingOrderSelectorTitle),
       content: SingleChildScrollView(
         child: Column(
           children: children,
@@ -55,7 +52,7 @@ class _SortingModeSelectorState extends State<SortingModeSelector> {
         OutlinedButton(
           key: const ValueKey("Cancel"),
           child: Text(
-            tr(LocaleKeys.settings_cancel),
+            context.loc.settingsCancel,
             style: Theme.of(context).textTheme.bodyText2,
           ),
           onPressed: () {
@@ -65,7 +62,7 @@ class _SortingModeSelectorState extends State<SortingModeSelector> {
         OutlinedButton(
           key: const ValueKey("Ok"),
           child: Text(
-            tr(LocaleKeys.settings_ok),
+            context.loc.settingsOk,
             style: Theme.of(context).textTheme.bodyText2,
           ),
           onPressed: () {
@@ -78,7 +75,7 @@ class _SortingModeSelectorState extends State<SortingModeSelector> {
 
   RadioListTile<SortingField> _buildSortingTile(SortingField sf) {
     return RadioListTile<SortingField>(
-      title: Text(sf.toPublicString()),
+      title: Text(sf.toPublicString(context)),
       value: sf,
       groupValue: _field,
       onChanged: (SortingField? sf) {
@@ -91,7 +88,7 @@ class _SortingModeSelectorState extends State<SortingModeSelector> {
 
   RadioListTile<SortingOrder> _buildSortingOrderTile(SortingOrder so) {
     return RadioListTile<SortingOrder>(
-      title: Text(so.toPublicString()),
+      title: Text(so.toPublicString(context)),
       value: so,
       groupValue: _order,
       onChanged: (SortingOrder? so) {

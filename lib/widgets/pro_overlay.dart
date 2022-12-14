@@ -5,14 +5,11 @@
  */
 
 import 'package:flutter/material.dart';
-
-import 'package:easy_localization/easy_localization.dart';
-import 'package:provider/provider.dart';
-
 import 'package:gitjournal/analytics/analytics.dart';
 import 'package:gitjournal/features.dart';
-import 'package:gitjournal/generated/locale_keys.g.dart';
+import 'package:gitjournal/l10n.dart';
 import 'package:gitjournal/settings/app_config.dart';
+import 'package:provider/provider.dart';
 
 class ProOverlay extends StatelessWidget {
   final Widget child;
@@ -33,7 +30,7 @@ class ProOverlay extends StatelessWidget {
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       child: Banner(
-        message: tr(LocaleKeys.pro),
+        message: context.loc.pro,
         location: BannerLocation.topEnd,
         color: Theme.of(context).disabledColor,
         child: IgnorePointer(child: Opacity(opacity: 0.5, child: child)),

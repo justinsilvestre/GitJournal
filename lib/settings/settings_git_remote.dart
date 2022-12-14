@@ -6,15 +6,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
-import 'package:easy_localization/easy_localization.dart';
 import 'package:git_setup/keygen.dart';
 import 'package:git_setup/sshkey.dart';
-import 'package:path/path.dart' as p;
-import 'package:provider/provider.dart';
-import 'package:universal_io/io.dart';
-
-import 'package:gitjournal/generated/locale_keys.g.dart';
+import 'package:gitjournal/l10n.dart';
 import 'package:gitjournal/logger/logger.dart';
 import 'package:gitjournal/repository.dart';
 import 'package:gitjournal/settings/git_config.dart';
@@ -25,6 +19,9 @@ import 'package:gitjournal/ssh/keygen.dart';
 import 'package:gitjournal/utils/utils.dart';
 import 'package:gitjournal/widgets/future_builder_with_progress.dart';
 import 'package:gitjournal/widgets/setup.dart';
+import 'package:path/path.dart' as p;
+import 'package:provider/provider.dart';
+import 'package:universal_io/io.dart';
 
 class GitRemoteSettingsScreen extends StatefulWidget {
   static const routePath = '/settings/gitRemote';
@@ -69,14 +66,14 @@ class _GitRemoteSettingsScreenState extends State<GitRemoteSettingsScreen> {
       children: <Widget>[
         if (remoteHost.isNotEmpty)
           Text(
-            tr(LocaleKeys.settings_gitRemote_host),
+            context.loc.settingsGitRemoteHost,
             style: textTheme.bodyText1,
             textAlign: TextAlign.left,
           ),
         if (remoteHost.isNotEmpty) ListTile(title: Text(remoteHost)),
         if (branches.isNotEmpty)
           ListPreference(
-            title: tr(LocaleKeys.settings_gitRemote_branch),
+            title: context.loc.settingsGitRemoteBranch,
             currentOption: currentBranch, // FIXME
             options: branches,
             onChange: (String branch) {
@@ -88,7 +85,7 @@ class _GitRemoteSettingsScreenState extends State<GitRemoteSettingsScreen> {
           ),
         const SizedBox(height: 8.0),
         Text(
-          tr(LocaleKeys.setup_sshKeyUserProvided_public),
+          context.loc.setupSshKeyUserProvidedPublic,
           style: textTheme.bodyText1,
           textAlign: TextAlign.left,
         ),
@@ -98,37 +95,37 @@ class _GitRemoteSettingsScreenState extends State<GitRemoteSettingsScreen> {
         const Divider(),
         Builder(
           builder: (BuildContext context) => Button(
-            text: tr(LocaleKeys.setup_sshKey_copy),
+            text: context.loc.setupSshKeyCopy,
             onPressed: () => _copyKeyToClipboard(context),
           ),
         ),
         Builder(
           builder: (BuildContext context) => Button(
-            text: tr(LocaleKeys.setup_sshKey_regenerate),
+            text: context.loc.setupSshKeyRegenerate,
             onPressed: () => _generateSshKey(context),
           ),
         ),
         Builder(
           builder: (BuildContext context) => Button(
-            text: tr(LocaleKeys.setup_sshKeyChoice_custom),
+            text: context.loc.setupSshKeyChoiceCustom,
             onPressed: _customSshKeys,
           ),
         ),
         ListPreference(
-          title: tr(LocaleKeys.settings_ssh_syncFreq),
-          currentOption: settings.remoteSyncFrequency.toPublicString(),
+          title: context.loc.settingsSshSyncFreq,
+          currentOption: settings.remoteSyncFrequency.toPublicString(context),
           options: RemoteSyncFrequency.options
-              .map((f) => f.toPublicString())
+              .map((f) => f.toPublicString(context))
               .toList(),
           onChange: (String publicStr) {
-            var val = RemoteSyncFrequency.fromPublicString(publicStr);
+            var val = RemoteSyncFrequency.fromPublicString(context, publicStr);
             settings.remoteSyncFrequency = val;
             settings.save();
             setState(() {});
           },
         ),
         RedButton(
-          text: tr(LocaleKeys.settings_gitRemote_changeHost_title),
+          text: context.loc.settingsGitRemoteChangeHostTitle,
           onPressed: _reconfigureGitHost,
         ),
         FutureBuilderWithProgress(future: () async {
@@ -144,7 +141,7 @@ class _GitRemoteSettingsScreenState extends State<GitRemoteSettingsScreen> {
           }
 
           return RedButton(
-            text: tr(LocaleKeys.settings_gitRemote_resetHard_title),
+            text: context.loc.settingsGitRemoteResetHardTitle,
             onPressed: _resetGitHost,
           );
         }()),
@@ -154,7 +151,7 @@ class _GitRemoteSettingsScreenState extends State<GitRemoteSettingsScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(tr(LocaleKeys.settings_gitRemote_title)),
+        title: Text(context.loc.settingsGitRemoteTitle),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
@@ -176,10 +173,10 @@ class _GitRemoteSettingsScreenState extends State<GitRemoteSettingsScreen> {
       builder: (context) => Scaffold(
         body: GitHostUserProvidedKeysPage(
           doneFunction: _updateKeys,
-          saveText: tr(LocaleKeys.setup_sshKey_save),
+          saveText: context.loc.setupSshKeySave,
         ),
         appBar: AppBar(
-          title: Text(tr(LocaleKeys.setup_sshKeyChoice_custom)),
+          title: Text(context.loc.setupSshKeyChoiceCustom),
         ),
       ),
       settings: const RouteSettings(name: '/settings/gitRemote/customKeys'),
@@ -204,7 +201,7 @@ class _GitRemoteSettingsScreenState extends State<GitRemoteSettingsScreen> {
   void _copyKeyToClipboard(BuildContext context) {
     var gitConfig = context.read<GitConfig>();
     Clipboard.setData(ClipboardData(text: gitConfig.sshPublicKey));
-    showSnackbar(context, tr(LocaleKeys.setup_sshKey_copied));
+    showSnackbar(context, context.loc.setupSshKeyCopied);
   }
 
   void _generateSshKey(BuildContext context) {
@@ -232,8 +229,8 @@ class _GitRemoteSettingsScreenState extends State<GitRemoteSettingsScreen> {
     var ok = await showDialog(
       context: context,
       builder: (_) => IrreversibleActionConfirmationDialog(
-        title: LocaleKeys.settings_gitRemote_changeHost_title.tr(),
-        subtitle: LocaleKeys.settings_gitRemote_changeHost_subtitle.tr(),
+        title: context.loc.settingsGitRemoteChangeHostTitle,
+        subtitle: context.loc.settingsGitRemoteChangeHostSubtitle,
       ),
     );
     if (ok == null) {
@@ -277,8 +274,8 @@ class _GitRemoteSettingsScreenState extends State<GitRemoteSettingsScreen> {
     var ok = await showDialog(
       context: context,
       builder: (_) => IrreversibleActionConfirmationDialog(
-        title: LocaleKeys.settings_gitRemote_resetHard_title.tr(),
-        subtitle: LocaleKeys.settings_gitRemote_resetHard_subtitle.tr(),
+        title: context.loc.settingsGitRemoteResetHardTitle,
+        subtitle: context.loc.settingsGitRemoteResetHardSubtitle,
       ),
     );
     if (ok == null) {
@@ -354,11 +351,11 @@ class IrreversibleActionConfirmationDialog extends StatelessWidget {
       content: Text(subtitle),
       actions: <Widget>[
         TextButton(
-          child: Text(LocaleKeys.settings_gitRemote_changeHost_cancel.tr()),
+          child: Text(context.loc.settingsGitRemoteChangeHostCancel),
           onPressed: () => Navigator.of(context).pop(),
         ),
         TextButton(
-          child: Text(LocaleKeys.settings_gitRemote_changeHost_ok.tr()),
+          child: Text(context.loc.settingsGitRemoteChangeHostOk),
           onPressed: () => Navigator.of(context).pop(true),
         ),
       ],

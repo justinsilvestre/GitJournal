@@ -6,16 +6,13 @@
 
 import 'dart:convert';
 
-import 'package:flutter/material.dart';
-
 import 'package:community_material_icon/community_material_icon.dart';
 import 'package:crypto/crypto.dart';
-import 'package:easy_localization/easy_localization.dart';
-import 'package:provider/provider.dart';
-
-import 'package:gitjournal/generated/locale_keys.g.dart';
+import 'package:flutter/material.dart';
+import 'package:gitjournal/l10n.dart';
 import 'package:gitjournal/logger/logger.dart';
 import 'package:gitjournal/settings/app_config.dart';
+import 'package:provider/provider.dart';
 
 class ExperimentalSettingsScreen extends StatefulWidget {
   static const routePath = '/settings/experimental';
@@ -33,7 +30,7 @@ class _ExperimentalSettingsScreenState
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(tr(LocaleKeys.settings_experimental_title)),
+        title: Text(context.loc.settingsExperimentalTitle),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
@@ -49,8 +46,7 @@ class _ExperimentalSettingsScreenState
             ),
             const Divider(),
             SwitchListTile(
-              title:
-                  Text(tr(LocaleKeys.settings_experimental_includeSubfolders)),
+              title: Text(context.loc.settingsExperimentalIncludeSubfolders),
               value: appConfig.experimentalSubfolders,
               onChanged: (bool newVal) {
                 appConfig.experimentalSubfolders = newVal;
@@ -59,7 +55,7 @@ class _ExperimentalSettingsScreenState
               },
             ),
             SwitchListTile(
-              title: Text(tr(LocaleKeys.settings_experimental_graphView)),
+              title: Text(context.loc.settingsExperimentalGraphView),
               value: appConfig.experimentalGraphView,
               onChanged: (bool newVal) {
                 appConfig.experimentalGraphView = newVal;
@@ -68,7 +64,7 @@ class _ExperimentalSettingsScreenState
               },
             ),
             SwitchListTile(
-              title: Text(tr(LocaleKeys.settings_experimental_markdownToolbar)),
+              title: Text(context.loc.settingsExperimentalMarkdownToolbar),
               value: appConfig.experimentalMarkdownToolbar,
               onChanged: (bool newVal) {
                 appConfig.experimentalMarkdownToolbar = newVal;
@@ -77,7 +73,7 @@ class _ExperimentalSettingsScreenState
               },
             ),
             SwitchListTile(
-              title: Text(tr(LocaleKeys.settings_experimental_accounts)),
+              title: Text(context.loc.settingsExperimentalAccounts),
               value: appConfig.experimentalAccounts,
               onChanged: (bool newVal) {
                 appConfig.experimentalAccounts = newVal;
@@ -86,7 +82,7 @@ class _ExperimentalSettingsScreenState
               },
             ),
             SwitchListTile(
-              title: Text(tr(LocaleKeys.settings_experimental_merge)),
+              title: Text(context.loc.settingsExperimentalMerge),
               value: appConfig.experimentalGitMerge,
               onChanged: (bool newVal) {
                 appConfig.experimentalGitMerge = newVal;
@@ -95,8 +91,7 @@ class _ExperimentalSettingsScreenState
               },
             ),
             SwitchListTile(
-              title:
-                  Text(tr(LocaleKeys.settings_experimental_experimentalGitOps)),
+              title: Text(context.loc.settingsExperimentalExperimentalGitOps),
               value: appConfig.experimentalGitOps,
               onChanged: (bool newVal) {
                 appConfig.experimentalGitOps = newVal;
@@ -105,8 +100,7 @@ class _ExperimentalSettingsScreenState
               },
             ),
             SwitchListTile(
-              title:
-                  Text(tr(LocaleKeys.settings_experimental_autoCompleteTags)),
+              title: Text(context.loc.settingsExperimentalAutoCompleteTags),
               value: appConfig.experimentalTagAutoCompletion,
               onChanged: (bool newVal) {
                 appConfig.experimentalTagAutoCompletion = newVal;
@@ -115,7 +109,7 @@ class _ExperimentalSettingsScreenState
               },
             ),
             SwitchListTile(
-              title: Text(tr(LocaleKeys.settings_experimental_history)),
+              title: Text(context.loc.settingsExperimentalHistory),
               value: appConfig.experimentalHistory,
               onChanged: (bool newVal) {
                 appConfig.experimentalHistory = newVal;
@@ -179,7 +173,7 @@ class _PasswordForm extends StatelessWidget {
       ),
       actions: <Widget>[
         TextButton(
-          child: Text(tr(LocaleKeys.settings_ok)),
+          child: Text(context.loc.settingsOk),
           onPressed: () {
             Navigator.of(context).pop();
           },

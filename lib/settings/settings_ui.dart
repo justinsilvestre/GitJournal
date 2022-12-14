@@ -5,13 +5,9 @@
  */
 
 import 'package:flutter/material.dart';
-
-import 'package:easy_localization/easy_localization.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:provider/provider.dart';
-
 import 'package:gitjournal/features.dart';
-import 'package:gitjournal/generated/locale_keys.g.dart';
+import 'package:gitjournal/l10n.dart';
 import 'package:gitjournal/settings/settings.dart';
 import 'package:gitjournal/settings/settings_bottom_menu_bar.dart';
 import 'package:gitjournal/settings/settings_display_images.dart';
@@ -22,6 +18,7 @@ import 'package:gitjournal/settings/widgets/language_selector.dart';
 import 'package:gitjournal/settings/widgets/settings_header.dart';
 import 'package:gitjournal/settings/widgets/settings_list_preference.dart';
 import 'package:gitjournal/widgets/pro_overlay.dart';
+import 'package:provider/provider.dart';
 
 const feature_themes = false;
 
@@ -36,21 +33,22 @@ class SettingsUIScreen extends StatelessWidget {
 
     var list = ListView(
       children: [
-        SettingsHeader(tr(LocaleKeys.settings_display_title)),
+        SettingsHeader(context.loc.settingsDisplayTitle),
         ListPreference(
-          title: tr(LocaleKeys.settings_display_theme),
-          currentOption: settings.theme.toPublicString(),
-          options:
-              SettingsTheme.options.map((f) => f.toPublicString()).toList(),
+          title: context.loc.settingsDisplayTheme,
+          currentOption: settings.theme.toPublicString(context),
+          options: SettingsTheme.options
+              .map((f) => f.toPublicString(context))
+              .toList(),
           onChange: (String publicStr) {
-            var s = SettingsTheme.fromPublicString(publicStr);
+            var s = SettingsTheme.fromPublicString(context, publicStr);
             settings.theme = s;
             settings.save();
           },
         ),
         if (feature_themes)
           SettingsTile(
-            title: LocaleKeys.settings_theme_light.tr(),
+            title: context.loc.settingsThemeLight,
             iconData: FontAwesomeIcons.sun,
             onTap: () {
               var route = MaterialPageRoute(
@@ -64,7 +62,7 @@ class SettingsUIScreen extends StatelessWidget {
           ),
         if (feature_themes)
           SettingsTile(
-            title: LocaleKeys.settings_theme_dark.tr(),
+            title: context.loc.settingsThemeDark,
             iconData: FontAwesomeIcons.solidMoon,
             onTap: () {
               var route = MaterialPageRoute(
@@ -78,8 +76,8 @@ class SettingsUIScreen extends StatelessWidget {
           ),
         const LanguageSelector(),
         ListTile(
-          title: Text(tr(LocaleKeys.settings_display_images_title)),
-          subtitle: Text(tr(LocaleKeys.settings_display_images_subtitle)),
+          title: Text(context.loc.settingsDisplayImagesTitle),
+          subtitle: Text(context.loc.settingsDisplayImagesSubtitle),
           onTap: () {
             var route = MaterialPageRoute(
               builder: (context) => SettingsDisplayImagesScreen(),
@@ -93,13 +91,13 @@ class SettingsUIScreen extends StatelessWidget {
         ProOverlay(
           feature: Feature.customizeHomeScreen,
           child: ListPreference(
-            title: tr(LocaleKeys.settings_display_homeScreen),
-            currentOption: settings.homeScreen.toPublicString(),
+            title: context.loc.settingsDisplayHomeScreen,
+            currentOption: settings.homeScreen.toPublicString(context),
             options: SettingsHomeScreen.options
-                .map((f) => f.toPublicString())
+                .map((f) => f.toPublicString(context))
                 .toList(),
             onChange: (String publicStr) {
-              var s = SettingsHomeScreen.fromPublicString(publicStr);
+              var s = SettingsHomeScreen.fromPublicString(context, publicStr);
               settings.homeScreen = s;
               settings.save();
             },
@@ -108,8 +106,8 @@ class SettingsUIScreen extends StatelessWidget {
         ProOverlay(
           feature: Feature.configureBottomMenuBar,
           child: ListTile(
-            title: Text(tr(LocaleKeys.settings_bottomMenuBar_title)),
-            subtitle: Text(tr(LocaleKeys.settings_bottomMenuBar_subtitle)),
+            title: Text(context.loc.settingsBottomMenuBarTitle),
+            subtitle: Text(context.loc.settingsBottomMenuBarSubtitle),
             onTap: () {
               var route = MaterialPageRoute(
                 builder: (context) => BottomMenuBarSettings(),
@@ -121,7 +119,7 @@ class SettingsUIScreen extends StatelessWidget {
           ),
         ),
         ListTile(
-          title: Text(tr(LocaleKeys.settings_misc_title)),
+          title: Text(context.loc.settingsMiscTitle),
           onTap: () {
             var route = MaterialPageRoute(
               builder: (context) => SettingsMisc(),
@@ -135,7 +133,7 @@ class SettingsUIScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(LocaleKeys.settings_list_userInterface_title.tr()),
+        title: Text(context.loc.settingsListUserInterfaceTitle),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {

@@ -8,14 +8,13 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-
-import 'package:easy_localization/easy_localization.dart';
-import 'package:provider/provider.dart';
-
+import 'package:gitjournal/l10n.dart';
 import 'package:gitjournal/settings/markdown_renderer_config.dart';
 import 'package:gitjournal/settings/settings_display_images_caption.dart';
 import 'package:gitjournal/settings/settings_display_images_theming.dart';
 import 'package:gitjournal/settings/widgets/settings_header.dart';
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class SettingsDisplayImagesScreen extends StatefulWidget {
   static const routePath = '/settings/display_images';
@@ -34,8 +33,8 @@ class SettingsDisplayImagesScreenState
 
     final body = ListView(children: <Widget>[
       ListTile(
-        title: Text(tr("settings.display.images.theming.title")),
-        subtitle: Text(tr("settings.display.images.theming.subtitle")),
+        title: Text(context.loc.settingsDisplayImagesThemingTitle),
+        subtitle: Text(context.loc.settingsDisplayImagesThemingSubtitle),
         onTap: () {
           var route = MaterialPageRoute(
             builder: (context) => SettingsDisplayImagesThemingScreen(),
@@ -46,8 +45,8 @@ class SettingsDisplayImagesScreenState
         },
       ),
       ListTile(
-        title: Text(tr("settings.display.images.captions.title")),
-        subtitle: Text(tr("settings.display.images.captions.subtitle")),
+        title: Text(context.loc.settingsDisplayImagesCaptionsTitle),
+        subtitle: Text(context.loc.settingsDisplayImagesCaptionsSubtitle),
         onTap: () {
           var route = MaterialPageRoute(
             builder: (context) => SettingsDisplayImagesCaptionScreen(),
@@ -57,9 +56,9 @@ class SettingsDisplayImagesScreenState
           var _ = Navigator.push(context, route);
         },
       ),
-      SettingsHeader(tr('settings.display.images.detailsView.header')),
+      SettingsHeader(context.loc.settingsDisplayImagesDetailsViewHeader),
       ListTile(
-          title: Text(tr("settings.display.images.detailsView.maxZoom")),
+          title: Text(context.loc.settingsDisplayImagesDetailsViewMaxZoom),
           subtitle: Row(children: [
             Expanded(
                 child: Slider.adaptive(
@@ -92,9 +91,9 @@ class SettingsDisplayImagesScreenState
           ])),
       SwitchListTile(
         title: Text(
-            tr('settings.display.images.detailsView.rotateGestures.title')),
+            context.loc.settingsDisplayImagesDetailsViewRotateGesturesTitle),
         subtitle: Text(
-            tr('settings.display.images.detailsView.rotateGestures.subtitle')),
+            context.loc.settingsDisplayImagesDetailsViewRotateGesturesSubtitle),
         value: settings.rotateImageGestures,
         onChanged: (bool newVal) {
           settings.rotateImageGestures = newVal;
@@ -105,7 +104,7 @@ class SettingsDisplayImagesScreenState
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(tr('settings.display.images.title')),
+        title: Text(context.loc.settingsDisplayImagesTitle),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {

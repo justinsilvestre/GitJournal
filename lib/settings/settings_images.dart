@@ -5,15 +5,12 @@
  */
 
 import 'package:flutter/material.dart';
-
-import 'package:easy_localization/easy_localization.dart';
-import 'package:provider/provider.dart';
-
 import 'package:gitjournal/core/folder/notes_folder_config.dart';
 import 'package:gitjournal/core/folder/notes_folder_fs.dart';
-import 'package:gitjournal/generated/locale_keys.g.dart';
+import 'package:gitjournal/l10n.dart';
 import 'package:gitjournal/settings/widgets/settings_list_preference.dart';
 import 'package:gitjournal/widgets/folder_selection_dialog.dart';
+import 'package:provider/provider.dart';
 
 class SettingsImagesScreen extends StatefulWidget {
   static const routePath = '/settings/images';
@@ -35,12 +32,12 @@ class SettingsImagesScreenState extends State<SettingsImagesScreen> {
       folderConfig.save();
     }
 
-    var sameFolder = tr("settings.images.currentFolder");
-    var customFolder = tr("settings.images.customFolder");
+    var sameFolder = context.loc.settingsImagesCurrentFolder;
+    var customFolder = context.loc.settingsImagesCustomFolder;
 
     var body = ListView(children: <Widget>[
       ListPreference(
-        title: tr("settings.images.imageLocation"),
+        title: context.loc.settingsImagesImageLocation,
         currentOption:
             folderConfig.imageLocationSpec == '.' ? sameFolder : customFolder,
         options: [sameFolder, customFolder],
@@ -74,7 +71,7 @@ class SettingsImagesScreenState extends State<SettingsImagesScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(tr(LocaleKeys.settings_images_title)),
+        title: Text(context.loc.settingsImagesTitle),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {

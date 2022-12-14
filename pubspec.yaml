@@ -4,7 +4,7 @@ version: 1.85.2+10
 
 environment:
   sdk: ">=2.17.3 <3.0.0"
-  flutter: ">=3.0.3"
+  flutter: ">=3.3.3"
 
 publish_to: none
 
@@ -28,8 +28,6 @@ dependencies:
   dio: ^4.0.6
   dio_smart_retry: ^1.2.0
   dots_indicator: ^2.0.0
-  easy_localization: ^3.0.0
-  easy_localization_loader: ^1.0.0
   email_validator: ^2.0.1
   equatable: ^2.0.0
   fast_immutable_collections: ^7.1.2
@@ -98,6 +96,7 @@ dependencies:
   uuid: ^3.0.4
   yaml: ^3.1.0
   yaml_serializer: ^0.0.12
+  flutter_displaymode: ^0.4.1
 
 dev_dependencies:
   benchmark_harness: ^2.0.0
@@ -112,23 +111,21 @@ dev_dependencies:
     sdk: flutter
   hive_generator: ^1.1.0
   # flutter_webview_plugin: ^0.3.11
-  import_sorter: ^4.6.0
   junitreport: ^2.0.2
   monarch: ^2.3.0
   process_run: ^0.12.3+2
   # multicast_dns: ^0.3.0
-  #screenshots: ^2.1.1
   test: ^1.16.5
 
 flutter:
   uses-material-design: true
+  generate: true
   assets:
     - "assets/icon/icon.png"
     - "assets/icon/github-icon.png"
     - "assets/icon/gitlab-icon.png"
     - "assets/OnBoardingMarkdown.png"
     - "assets/OnBoardingGitProviders.png"
-    - "assets/langs/"
   fonts:
     - family: Lato
       fonts:
@@ -145,6 +142,3 @@ flutter_icons:
   macos: true
   windows: false
   linux: false
-
-import_sorter:
-  comments: false

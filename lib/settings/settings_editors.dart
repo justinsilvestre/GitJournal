@@ -5,16 +5,12 @@
  */
 
 import 'package:flutter/material.dart';
-
-import 'package:easy_localization/easy_localization.dart';
-import 'package:provider/provider.dart';
-
 import 'package:gitjournal/core/folder/notes_folder_config.dart';
 import 'package:gitjournal/core/folder/notes_folder_fs.dart';
 import 'package:gitjournal/core/notes/note.dart';
 import 'package:gitjournal/editors/common_types.dart';
 import 'package:gitjournal/features.dart';
-import 'package:gitjournal/generated/locale_keys.g.dart';
+import 'package:gitjournal/l10n.dart';
 import 'package:gitjournal/settings/settings.dart';
 import 'package:gitjournal/settings/settings_storage.dart';
 import 'package:gitjournal/settings/widgets/settings_header.dart';
@@ -22,6 +18,7 @@ import 'package:gitjournal/settings/widgets/settings_list_preference.dart';
 import 'package:gitjournal/utils/utils.dart';
 import 'package:gitjournal/widgets/folder_selection_dialog.dart';
 import 'package:gitjournal/widgets/pro_overlay.dart';
+import 'package:provider/provider.dart';
 
 class SettingsEditorsScreen extends StatefulWidget {
   static const routePath = '/settings/editors';
@@ -37,11 +34,11 @@ class SettingsEditorsScreenState extends State<SettingsEditorsScreen> {
     var folderConfig = Provider.of<NotesFolderConfig>(context);
     var defaultNewFolder = settings.journalEditordefaultNewNoteFolderSpec;
     if (defaultNewFolder.isEmpty) {
-      defaultNewFolder = LocaleKeys.none.tr();
+      defaultNewFolder = context.loc.none;
     } else {
       if (!folderWithSpecExists(context, defaultNewFolder)) {
         setState(() {
-          defaultNewFolder = tr(LocaleKeys.rootFolder);
+          defaultNewFolder = context.loc.rootFolder;
 
           settings.journalEditordefaultNewNoteFolderSpec = "";
           settings.save();
@@ -52,25 +49,26 @@ class SettingsEditorsScreenState extends State<SettingsEditorsScreen> {
     var body = ListView(children: <Widget>[
       const DefaultEditorTile(),
       const DefaultFileFormatTile(),
-      //SettingsHeader(tr("settings.editors.markdownEditor")),
+      //SettingsHeader(context.loc.settings.editors.markdownEditor),
       ListPreference(
-        title: tr(LocaleKeys.settings_editors_defaultState),
-        currentOption: settings.markdownDefaultView.toPublicString(),
+        title: context.loc.settingsEditorsDefaultState,
+        currentOption: settings.markdownDefaultView.toPublicString(context),
         options: SettingsMarkdownDefaultView.options
-            .map((f) => f.toPublicString())
+            .map((f) => f.toPublicString(context))
             .toList(),
         onChange: (String publicStr) {
-          var val = SettingsMarkdownDefaultView.fromPublicString(publicStr);
+          var val =
+              SettingsMarkdownDefaultView.fromPublicString(context, publicStr);
           settings.markdownDefaultView = val;
           settings.save();
           setState(() {});
         },
       ),
-      SettingsHeader(tr(LocaleKeys.settings_editors_journalEditor)),
+      SettingsHeader(context.loc.settingsEditorsJournalEditor),
       ProOverlay(
         feature: Feature.journalEditorDefaultFolder,
         child: ListTile(
-          title: Text(tr(LocaleKeys.settings_editors_defaultFolder)),
+          title: Text(context.loc.settingsEditorsDefaultFolder),
           subtitle: Text(defaultNewFolder),
           onTap: () async {
             var destFolder = await showDialog<NotesFolderFS>(
@@ -88,7 +86,7 @@ class SettingsEditorsScreenState extends State<SettingsEditorsScreen> {
       ProOverlay(
         feature: Feature.singleJournalEntry,
         child: SwitchListTile(
-          title: Text(tr(LocaleKeys.feature_singleJournalEntry)),
+          title: Text(context.loc.featureSingleJournalEntry),
           value: settings.journalEditorSingleNote,
           onChanged: (bool newVal) {
             settings.journalEditorSingleNote = newVal;
@@ -100,13 +98,15 @@ class SettingsEditorsScreenState extends State<SettingsEditorsScreen> {
       ProOverlay(
         feature: Feature.singleJournalEntry,
         child: ListPreference(
-          title: tr(LocaleKeys.settings_note_newNoteFileName),
-          currentOption: folderConfig.journalFileNameFormat.toPublicString(),
+          title: context.loc.settingsNoteNewNoteFileName,
+          currentOption:
+              folderConfig.journalFileNameFormat.toPublicString(context),
           options: NoteFileNameFormat.options
-              .map((f) => f.toPublicString())
+              .map((f) => f.toPublicString(context))
               .toList(),
           onChange: (String publicStr) {
-            var format = NoteFileNameFormat.fromPublicString(publicStr);
+            var format =
+                NoteFileNameFormat.fromPublicString(context, publicStr);
             folderConfig.journalFileNameFormat = format;
             folderConfig.save();
             setState(() {});
@@ -117,7 +117,7 @@ class SettingsEditorsScreenState extends State<SettingsEditorsScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(tr(LocaleKeys.settings_editors_title)),
+        title: Text(context.loc.settingsEditorsTitle),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
@@ -149,11 +149,11 @@ class DefaultEditorTile extends StatelessWidget {
     }
 
     return ListPreference(
-      title: tr(LocaleKeys.settings_editors_defaultEditor),
-      currentOption: defaultEditor.toPublicString(),
-      options: options.map((f) => f.toPublicString()).toList(),
+      title: context.loc.settingsEditorsDefaultEditor,
+      currentOption: defaultEditor.toPublicString(context),
+      options: options.map((f) => f.toPublicString(context)).toList(),
       onChange: (String publicStr) {
-        var val = SettingsEditorType.fromPublicString(publicStr);
+        var val = SettingsEditorType.fromPublicString(context, publicStr);
         folderConfig.defaultEditor = val;
         folderConfig.save();
       },

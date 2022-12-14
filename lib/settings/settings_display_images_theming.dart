@@ -6,15 +6,12 @@
  */
 
 import 'package:flutter/material.dart';
-
-import 'package:easy_localization/easy_localization.dart';
-import 'package:provider/provider.dart';
-
-import 'package:gitjournal/generated/locale_keys.g.dart';
+import 'package:gitjournal/l10n.dart';
 import 'package:gitjournal/settings/markdown_renderer_config.dart';
 import 'package:gitjournal/settings/settings.dart';
 import 'package:gitjournal/settings/widgets/settings_header.dart';
 import 'package:gitjournal/settings/widgets/settings_list_preference.dart';
+import 'package:provider/provider.dart';
 
 class SettingsDisplayImagesThemingScreen extends StatefulWidget {
   @override
@@ -41,21 +38,19 @@ class SettingsDisplayImagesThemingScreenState
         key: doNotThemeTagsKey,
         style: Theme.of(context).textTheme.headline6,
         decoration: InputDecoration(
-          hintText:
-              tr(LocaleKeys.settings_display_images_theming_doThemeTags_hint),
-          labelText:
-              tr(LocaleKeys.settings_display_images_theming_doThemeTags_label),
+          hintText: context.loc.settingsDisplayImagesThemingDoThemeTagsHint,
+          labelText: context.loc.settingsDisplayImagesThemingDoThemeTagsLabel,
         ),
         validator: (String? value) {
           value = value!.trim();
           if (parseTags(value).isEmpty) {
-            return tr(LocaleKeys
-                .settings_display_images_theming_doThemeTags_validator_empty);
+            return context
+                .loc.settingsDisplayImagesThemingDoThemeTagsValidatorEmpty;
           }
 
           if (parseTags(value).intersection(settings.doThemeTags).isNotEmpty) {
-            return tr(LocaleKeys
-                .settings_display_images_theming_doThemeTags_validator_same);
+            return context
+                .loc.settingsDisplayImagesThemingDoThemeTagsValidatorSame;
           }
 
           return null;
@@ -81,22 +76,20 @@ class SettingsDisplayImagesThemingScreenState
         key: doThemeTagsKey,
         style: Theme.of(context).textTheme.headline6,
         decoration: InputDecoration(
-          hintText:
-              tr(LocaleKeys.settings_display_images_theming_doThemeTags_hint),
-          labelText:
-              tr(LocaleKeys.settings_display_images_theming_doThemeTags_label),
+          hintText: context.loc.settingsDisplayImagesThemingDoThemeTagsHint,
+          labelText: context.loc.settingsDisplayImagesThemingDoThemeTagsLabel,
         ),
         validator: (String? value) {
           if (parseTags(value!).isEmpty) {
-            return tr(LocaleKeys
-                .settings_display_images_theming_doThemeTags_validator_empty);
+            return context
+                .loc.settingsDisplayImagesThemingDoThemeTagsValidatorEmpty;
           }
 
           if (parseTags(value)
               .intersection(settings.doNotThemeTags)
               .isNotEmpty) {
-            return tr(LocaleKeys
-                .settings_display_images_theming_doThemeTags_validator_same);
+            return context
+                .loc.settingsDisplayImagesThemingDoThemeTagsValidatorSame;
           }
 
           return null;
@@ -113,43 +106,45 @@ class SettingsDisplayImagesThemingScreenState
     );
     var body = ListView(children: <Widget>[
       SwitchListTile(
-        title: Text(tr('settings.display.images.theming.themeRasterGraphics')),
+        title:
+            Text(context.loc.settingsDisplayImagesThemingThemeRasterGraphics),
         value: settings.themeRasterGraphics,
         onChanged: (bool newVal) {
           settings.themeRasterGraphics = newVal;
           settings.save();
         },
       ),
-      SettingsHeader(tr('settings.display.images.theming.themeOverrides')),
+      SettingsHeader(context.loc.settingsDisplayImagesThemingThemeOverrides),
       Padding(
         padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
-        child: Text(tr("settings.display.images.theming.tagDescription")),
+        child: Text(context.loc.settingsDisplayImagesThemingTagDescription),
       ),
       ListPreference(
-        title: tr("settings.display.images.theming.themeOverrideTagLocation"),
-        currentOption: settings.themeOverrideTagLocation.toPublicString(),
+        title: context.loc.settingsDisplayImagesThemingThemeOverrideTagLocation,
+        currentOption:
+            settings.themeOverrideTagLocation.toPublicString(context),
         options: SettingsImageTextType.options
-            .map((e) => e.toPublicString())
+            .map((e) => e.toPublicString(context))
             .toList(),
         onChange: (String publicStr) {
           settings.themeOverrideTagLocation =
-              SettingsImageTextType.fromPublicString(publicStr);
+              SettingsImageTextType.fromPublicString(context, publicStr);
           settings.save();
           setState(() {});
         },
       ),
       ListTile(title: doThemeTagsForm),
       ListTile(title: doNotThemeTagsForm),
-      SettingsHeader(tr('settings.display.images.theming.vectorGraphics')),
+      SettingsHeader(context.loc.settingsDisplayImagesThemingVectorGraphics),
       ListPreference(
-        title: tr("settings.display.images.theming.themeVectorGraphics.title"),
-        currentOption: settings.themeVectorGraphics.toPublicString(),
+        title: context.loc.settingsDisplayImagesThemingThemeVectorGraphicsTitle,
+        currentOption: settings.themeVectorGraphics.toPublicString(context),
         options: SettingsThemeVectorGraphics.options
-            .map((e) => e.toPublicString())
+            .map((e) => e.toPublicString(context))
             .toList(),
         onChange: (String publicStr) {
           settings.themeVectorGraphics =
-              SettingsThemeVectorGraphics.fromPublicString(publicStr);
+              SettingsThemeVectorGraphics.fromPublicString(context, publicStr);
           settings.save();
           setState(() {});
         },
@@ -157,7 +152,7 @@ class SettingsDisplayImagesThemingScreenState
       if (settings.themeVectorGraphics == SettingsThemeVectorGraphics.On)
         SwitchListTile(
           title: Text(
-              tr('settings.display.images.theming.themeSvgWithBackground')),
+              context.loc.settingsDisplayImagesThemingThemeSvgWithBackground),
           value: settings.themeSvgWithBackground,
           onChanged: (bool newVal) {
             settings.themeSvgWithBackground = newVal;
@@ -167,9 +162,9 @@ class SettingsDisplayImagesThemingScreenState
       if (settings.themeVectorGraphics == SettingsThemeVectorGraphics.On)
         SwitchListTile(
           title: Text(
-              tr('settings.display.images.theming.matchCanvasColor.title')),
+              context.loc.settingsDisplayImagesThemingMatchCanvasColorTitle),
           subtitle: Text(
-              tr('settings.display.images.theming.matchCanvasColor.subtitle')),
+              context.loc.settingsDisplayImagesThemingMatchCanvasColorSubtitle),
           value: settings.matchCanvasColor,
           onChanged: (bool newVal) {
             settings.matchCanvasColor = newVal;
@@ -178,15 +173,17 @@ class SettingsDisplayImagesThemingScreenState
         ),
       if (settings.themeVectorGraphics == SettingsThemeVectorGraphics.On)
         ListPreference(
-          title:
-              tr("settings.display.images.theming.vectorGraphicsAdjustColors"),
-          currentOption: settings.vectorGraphicsAdjustColors.toPublicString(),
+          title: context
+              .loc.settingsDisplayImagesThemingVectorGraphicsAdjustColors,
+          currentOption:
+              settings.vectorGraphicsAdjustColors.toPublicString(context),
           options: SettingsVectorGraphicsAdjustColors.options
-              .map((e) => e.toPublicString())
+              .map((e) => e.toPublicString(context))
               .toList(),
           onChange: (String publicStr) {
             settings.vectorGraphicsAdjustColors =
-                SettingsVectorGraphicsAdjustColors.fromPublicString(publicStr);
+                SettingsVectorGraphicsAdjustColors.fromPublicString(
+                    context, publicStr);
             settings.save();
             setState(() {});
           },
@@ -195,7 +192,7 @@ class SettingsDisplayImagesThemingScreenState
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(tr(LocaleKeys.settings_display_images_theming_title)),
+        title: Text(context.loc.settingsDisplayImagesThemingTitle),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
