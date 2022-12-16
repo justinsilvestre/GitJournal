@@ -14,6 +14,10 @@ class ListPreference extends StatelessWidget {
   final List<String> options;
   final Func1<String, void> onChange;
   final bool enabled;
+  final Widget Function(String? currentOption, String option)?
+      optionLabelBuilder;
+  final List<Widget> Function(BuildContext context, String? currentOption)?
+      actionsBuilder;
 
   const ListPreference({
     required this.title,
@@ -22,6 +26,8 @@ class ListPreference extends StatelessWidget {
     required this.onChange,
     this.enabled = true,
     super.key,
+    this.optionLabelBuilder,
+    this.actionsBuilder,
   });
 
   @override
@@ -47,7 +53,9 @@ class ListPreference extends StatelessWidget {
     var children = <Widget>[];
     for (var o in options) {
       var tile = _LabeledRadio(
-        label: o,
+        label: optionLabelBuilder != null
+            ? optionLabelBuilder!(currentOption, o)
+            : Text(o),
         value: o,
         groupValue: currentOption,
         onChanged: (String? val) {
@@ -70,14 +78,16 @@ class ListPreference extends StatelessWidget {
         ),
       ),
       contentPadding: EdgeInsets.zero,
-      actions: <Widget>[
-        TextButton(
-          child: Text(context.loc.settingsCancel),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-        )
-      ],
+      actions: actionsBuilder != null
+          ? actionsBuilder!(context, currentOption)
+          : <Widget>[
+              TextButton(
+                child: Text(context.loc.settingsCancel),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              )
+            ],
       actionsPadding: const EdgeInsets.fromLTRB(0, 0, 8, 8),
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(8.0)),
@@ -94,7 +104,7 @@ class _LabeledRadio extends StatelessWidget {
     required this.onChanged,
   });
 
-  final String label;
+  final Widget label;
   final String? groupValue;
   final String? value;
   final Func1<String?, void> onChanged;
@@ -114,7 +124,7 @@ class _LabeledRadio extends StatelessWidget {
               value: value,
               onChanged: onChanged,
             ),
-            Text(label),
+            label,
           ],
         ),
       ),
